@@ -1,0 +1,72 @@
+a) Compile y ejecute el programa descargado
+b) Responda ¿Qué hace el programa?
+
+program NumAleatorio;
+  var ale: integer;
+begin
+  randomize;
+  ale := random (100);
+  writeln ('El número aleatorio generado es: ', ale);
+  readln;
+end.
+
+c) Modifique el programa para que imprima 20 números
+aleatorios.
+d) Modifique el programa para que imprima N números
+aleatorios en el rango (A,B), donde N, A y B son
+números enteros que se leen por teclado.
+e) Modifique el programa para que imprima números
+aleatorios en el rango (A,B) hasta que se genere un
+valor igual a F, el cual no debe imprimirse. F, A y B
+son números enteros que se leen por teclado.
+
+b) el programa lo que hace es colocar en la variable "ale" un valor random entre el 0 y el 100, luego de eso lo que hace es mostrar en pantalla el numero random que salio y luego finaliza el programa.
+c) 
+  program NumAleatorio;
+    var ale: integer;
+      i: integer;
+  begin
+    randomize;
+    for i := 1 to 20 do begin 
+      ale := random (100);
+      writeln ('El número aleatorio generado es: ', ale);
+    end;
+    readln; 
+  end.
+d) 
+  program NumAleatorio;
+  var ale: integer;
+    i,n,a,b: integer;
+  begin
+    randomize;
+    writeln('ingrese la cantidad de veces que se genere un numero aleatorio');
+    readln(n);
+    writeln('ingrese el numero minimo');
+    readln(a);
+    writeln('ingrese el numero maximo');
+    readln(b);
+    for i := 1 to n do begin 
+      ale := a + random (b - a + 1);
+      writeln ('El número aleatorio generado es: ', ale);
+    end;
+    readln; 
+  end.
+e) 
+  program NumAleatorio;
+  var ale: integer;
+    f,a,b: integer;
+  begin
+    randomize;
+    writeln('ingrese el numero minimo');
+    readln(a);
+    writeln('ingrese el numero maximo');
+    readln(b);
+    writeln('ingrese un valor entre el minimo y el maximo ');
+    readln(f); 
+    ale := a + random (b - a + 1);
+    while ( ale <> f)do begin 
+      writeln ('El número aleatorio generado es: ', ale);
+      ale:= a + random (b - a + 1);
+    end;
+    readln; 
+  end.
