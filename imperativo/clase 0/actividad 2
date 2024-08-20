@@ -1,0 +1,51 @@
+ACTIVIDAD 2: Crear un nuevo archivo ProgramaVectores.pas
+
+a) Implemente un módulo CargarVector que cree un vector de enteros
+con a lo sumo 50 valores aleatorios. Los valores, generados
+aleatoriamente (entre un mínimo y máximo recibidos por parámetro),
+deben ser almacenados en el vector en el mismo orden que se
+generaron, hasta que se genere el cero.
+b) Implemente un módulo ImprimirVector que reciba el vector generago
+en a) e imprima todos los valores del vector en el mismo orden que
+están almacenados. Qué cambiaría para imprimir en orden inverso?
+c) Escriba el cuerpo principal que invoque a los módulos ya
+implementados.
+
+a),b),c)
+
+program actividad_2;
+const
+  dimf = 50 ;
+type
+  rango = 1..50;
+  vector = array [rango] of integer;
+procedure cargar_vector (var v:vector;var diml:integer; min,max:integer);
+  begin 
+    randomize;
+    v[diml] := min+random(max - min + 1); 
+    while (diml <> 50 ) and (v[diml] <> 0) do begin 
+      diml:= diml + 1;
+      v[diml] := min+random(max - min + 1);     
+    end;
+  end;
+procedure imprimirvector(v:vector; diml:integer);
+  var 
+    i:integer;
+  begin 
+    for i := 1 to diml do begin 
+      writeln('el valor almacenado en la posicion ',i,' es ',v[i]);   
+    end;
+  end;
+var 
+  v:vector;
+  min,max,diml:integer;
+begin 
+  diml := 1;
+  writeln('ingrese en valor del minimo ');
+  readln(min);
+  writeln('ingrese el valor del maximo');
+  readln(max);
+  cargar_vector(v,diml,min,max);
+  writeln('el valor de diml es ',diml);
+  imprimirvector(v,diml);
+end.
