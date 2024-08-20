@@ -29,7 +29,7 @@ procedure agregaradelante(var l:lista; valor:integer);
     new(aux);
     aux^.dato:= valor;
     aux^.sig:= l;
-    l:= aux^.sig;
+    l:= aux;
   end;
 procedure cargarlista(var l:lista; min,max:integer);
   var 
@@ -45,24 +45,21 @@ procedure imprimirlista(l:lista);
   begin
     writeln('los valores de la lista son: ');
     while (l <> nil ) do begin 
-      writeln(' ',l^.dato);
+      writeln(' el valor es: ',l^.dato);
       l:=l^.sig;
-    end;
-  end;
-function cumple(guardado,valor:integer):boolean;
-  begin  
-    if (guardado = valor)then begin 
-      cumple:= true;
     end;
   end;
 procedure buscar_elemento(l:lista; valor:integer; var esta: boolean);
   begin 
+    esta:= false;
     while (l <> nil) do begin 
-      if(cumple(l^.dato,valor))then begin 
+      if(l^.dato = valor)then begin 
         esta:= true;
         l:= nil; 
+      end
+      else begin 
+        l := l^.sig;
       end;
-      l := l^.sig;
     end;
   end;
 var 
