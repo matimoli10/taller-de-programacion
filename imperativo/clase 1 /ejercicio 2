@@ -8,7 +8,7 @@ b. Ordene el vector, aplicando el método de inserción, por código de identifi
 oficina.
 c. Ordene el vector aplicando el método de selección, por código de identificación de la oficina.
 
-a) b) 
+a) b) c)
 program ejercicio_2;
 const 
   dimf = 300;
@@ -42,7 +42,26 @@ procedure cargarvector(var v:vector; var diml:integer);
       leerdatos(o);
     end;
   end; 
-procedure insercion(var v:vector; diml:integer );
+procedure seleccion (var v:vector; diml: integer);
+  var 
+    i,j:integer;
+    actual: oficina;
+    pos: rango;
+  begin 
+    for i := 1 to diml do begin 
+      pos := i;
+      for j := i+1 to diml do begin 
+        if(v[j].cod_identificacion < v[pos].cod_identificacion)then begin 
+          pos := j;
+        end;
+      end;
+      actual := v[pos];
+      v[pos] := v[i];
+      v[i] := actual;
+    end;
+  end;
+  
+{procedure insercion(var v:vector; diml:integer );
   var i,j: integer; 
     actual: oficina;
   begin 
@@ -56,7 +75,7 @@ procedure insercion(var v:vector; diml:integer );
         end;  
       v[j + 1]:= actual; 
     end;
-  end;
+  end;}
 procedure recorrovector(v:vector; diml:integer);
   var 
     i:rango;
@@ -71,7 +90,8 @@ var
 begin  
   diml:= 1;
   cargarVector(v,diml);
-  insercion(v,diml);
+ {insercion(v,diml);}
+  seleccion(v,diml);
   recorrovector (v,diml);
 end.
-c) 
+
