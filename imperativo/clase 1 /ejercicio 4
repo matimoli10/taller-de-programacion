@@ -1,0 +1,141 @@
+4.- Una librería requiere el procesamiento de la información de sus productos. De cada
+producto se conoce el código del producto, código de rubro (del 1 al 8) y precio.
+Implementar un programa que invoque a módulos para cada uno de los siguientes puntos:
+a. Lea los datos de los productos y los almacene ordenados por código de producto y
+agrupados por rubro, en una estructura de datos adecuada. El ingreso de los productos finaliza
+cuando se lee el precio 0.
+b. Una vez almacenados, muestre los códigos de los productos pertenecientes a cada rubro.
+c. Genere un vector (de a lo sumo 30 elementos) con los productos del rubro 3. Considerar que
+puede haber más o menos de 30 productos del rubro 3. Si la cantidad de productos del rubro 3
+es mayor a 30, almacenar los primeros 30 que están en la lista e ignore el resto.
+d. Ordene, por precio, los elementos del vector generado en c) utilizando alguno de los dos
+métodos vistos en la teoría.
+e. Muestre los precios del vector resultante del punto d).
+f. Calcule el promedio de los precios del vector resultante del punto d).
+
+
+program ejercicio_4;
+type 
+  rango = 1..8;
+  productos = record
+    cod_producto: integer;
+    cod_rubro: rango;
+    precio: real;
+  end;
+  lista =^nodo;
+  nodo = record 
+    dato: productos;
+    sig: lista;
+  end;
+  vector = array [rango] of lista;
+  vector_rubro_3 = array [1..30] of productos;
+procedure cargardatos(var p:productos);
+  begin
+    writeln('ingrese el precio del producto: ');
+    readln(p.precio);
+    if(p.precio <> 0)then begin 
+      writeln('ingrese el codigo del producto: ');
+      readln(p.cod_producto);
+      writeln('ingrese el codigo del rubro: ');
+      readln(p.cod_rubro);
+    end; 
+  end;
+procedure agregarordenado(var l:lista; p:productos);
+  var 
+    aux: lista;
+    act,ant: lista;
+  begin 
+    new(aux);
+    aux^.dato:= p;
+    ant:= l;
+    act:=l;
+    while (act <> nil)and (act^.dato.cod_producto < p.cod_producto) do begin 
+      ant:= act;
+      act:= act^.sig;
+    end;
+    if(ant = act)then begin
+      l:= aux 
+    end
+    else begin 
+      ant^.sig:= aux;
+    end;
+    aux^.sig:= act; 
+  end;
+procedure cargarlistas_dentro_del_vector(var v:vector);
+  var 
+    p: productos;
+  begin 
+    cargardatos(p);
+    while (p.precio <> 0)do begin 
+      agregarordenado(v[p.cod_rubro],p);
+      cargardatos(p);
+    end;
+  end;
+procedure imprimirlista(l:lista;este:integer);
+  begin 
+    writeln('los codigos que pertenecen al rubro',este,' son');
+    while (l<>nil)do begin 
+      writeln(' ',l^.dato.cod_producto);
+      l:=l^.sig;
+    end;
+  end;
+procedure recorrervector(v:vector);
+  var
+    i:rango;
+  begin 
+    for i := 1 to 8 do begin 
+      imprimirlista(v[i],i);
+    end;
+  end;
+procedure recorrerlista_rubro3(l: lista;var vr:vector_rubro_3; var diml:integer );
+  begin 
+    while(l <> nil) and (diml <> 30)do begin 
+      vr[diml]:= l^.dato;
+      diml:= diml + 1;
+      l:=l^.sig;
+    end; 
+  end;
+procedure seleccion(var vr:vector_rubro_3;diml:integer);
+  var
+    i,j,pos:integer;
+    actual: productos;
+  begin 
+    for i := 1 to diml-1 do begin 
+      pos:= i;
+      for j:= i+1 to diml do begin 
+        if(vr[j].precio < vr[pos].precio)then begin 
+          pos:= j;
+        end;
+      end;
+      actual:= vr[pos];
+      vr[pos]:= vr[i];
+      vr[i]:= actual;
+    end;
+  end;
+procedure mostrarprecios_calcularpromedio(vr :vector_rubro_3; diml:integer;var prom:real);
+  var
+    i: integer;
+    cant: real;
+  begin
+    cant:= 0;
+    for i:= 1 to diml do begin 
+      writeln('el precio es: ',vr[i].precio);
+      cant:= cant + vr[i].precio;
+    end;
+    if(diml <> 0)then begin 
+      prom:= cant / diml;
+    end;
+  end;
+var 
+  v: vector;
+  vr: vector_rubro_3;
+  diml: integer;
+  prom: real;
+begin 
+  cargarlistas_dentro_del_vector(v);
+  recorrervector(v);
+  recorrerlista_rubro3(v[3],vr,diml);
+  seleccion(vr,diml);
+  mostrarprecios_calcularpromedio(vr,diml,prom);
+  writeln('el promedio de los precios en el rubro 3 es: ',prom);
+end.
