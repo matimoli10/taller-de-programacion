@@ -19,7 +19,7 @@ type
   peliculas = record 
     cod_pelicula: integer;
     cod_genero: rango;
-    puntaje_criticas: integer;
+    puntaje_criticas: real;
   end;
   lista = ^nodo;
     nodo = record
@@ -28,7 +28,7 @@ type
     end;
   pelicula = record 
     codigo: integer;
-    mayor_puntaje : integer;
+    mayor_puntaje : real;
   end;
   vector = array [rango] of pelicula;
 procedure cargardatos(var p:peliculas);
