@@ -15,20 +15,20 @@ del vector obtenido en el punto c).
 
 program ejercicio_3;
 type
-  rango:= 1 .. 8;
+  rango = 1..8;
   peliculas = record 
     cod_pelicula: integer;
     cod_genero: rango;
-    puntaje_criticas: real;
+    puntaje_criticas: integer;
   end;
-  lista = ^nodo 
+  lista = ^nodo;
     nodo = record
       dato : peliculas; 
       sig: lista;
     end;
   pelicula = record 
     codigo: integer;
-    mayor_puntaje : real;
+    mayor_puntaje : integer;
   end;
   vector = array [rango] of pelicula;
 procedure cargardatos(var p:peliculas);
@@ -92,16 +92,32 @@ procedure recorrerlista(l:lista; var v:vector);
   end;
 procedure insercion (var v:vector);
   var 
-    i,j: rango;
-    actual: peliculas;
+    i,j: integer;
+    actual: pelicula;
   begin
     for i := 2 to 8 do begin 
       actual := v[i];
       j:= i - 1;
-      while(j <> 0) and (v[j].mayor_puntaje < actual.mayor_puntaje) do begin 
+      while(j > 0) and (v[j].mayor_puntaje < actual.mayor_puntaje) do begin 
          v[j+1] := v[j];
          j :=j -1;
       end;
-      v[j]:= actual;
+      v[j+1]:= actual;
     end; 
   end;
+procedure mayor_y_menor (v:vector);
+  begin 
+    writeln('el codigo de pelicula con mas puntaje es: ',v[1].codigo,' con un puntaje de ',v[1].mayor_puntaje );
+    writeln('el codigo de pelicula con menor puntaje es: ',v[8].codigo,' con un puntaje de ',v[8].mayor_puntaje );
+  end;
+var 
+  l:lista;
+  v:vector;
+begin 
+  l:= nil;
+  inicializarvector(v);
+  cargarlista(l);
+  recorrerlista(l,v);
+  insercion(v);
+  mayor_y_menor(v);
+end.
