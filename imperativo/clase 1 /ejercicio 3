@@ -23,14 +23,16 @@ type
   end;
   lista = ^nodo;
     nodo = record
-      dato : peliculas; 
+      dato : peliculas;
       sig: lista;
+      ult: lista;
     end;
-  pelicula = record 
-    codigo: integer;
-    mayor_puntaje : real;
+  peli = record 
+    cod_peli: integer;
+    puntaje : real;
   end;
-  vector = array [rango] of pelicula;
+  vector = array [rango] of lista;
+  mayor_puntaje = array [rango] of peli;
 procedure cargardatos(var p:peliculas);
   begin 
     writeln('ingrese el codigo de pelicula');
@@ -42,7 +44,7 @@ procedure cargardatos(var p:peliculas);
       readln(p.puntaje_criticas);
     end;
   end;
-procedure agregaratras(var l: lista; var ult:lista; p:peliculas );
+procedure agregaratras(var l: lista; p:peliculas );
   var 
     aux:lista;
   begin 
@@ -53,71 +55,79 @@ procedure agregaratras(var l: lista; var ult:lista; p:peliculas );
       l := aux;
     end
     else begin 
-      ult^.sig := aux;
+      l^.ult := aux;
     end;
-    ult := aux; 
+    l^.ult := aux; 
   end;
-procedure cargarlista(var l: lista );
+procedure cargarvector(var v:vector );
   var 
     p:peliculas;
-    ult:lista;
   begin 
     cargardatos(p);
     while (p.cod_pelicula <> -1)do begin 
-      agregaratras(l,ult,p);
+      agregaratras(v[p.cod_genero],p);
       cargardatos(p);
     end;
   end;
-procedure inicializarvector(var v:vector);
+procedure inicializarvector(var mp:mayor_puntaje);
   var 
     i : rango;
   begin 
     for i := 1 to 8 do begin 
-      v[i].mayor_puntaje := 0;
+      mp[i].puntaje:= 0;
     end;
   end;
-procedure cada_genero (var v:vector; p:peliculas);
+procedure mayor(l:lista ;var codigo:integer;var puntaje_mayor:real);
+  var 
+    mayor: real;
+    codi:integer;
   begin 
-    if (v[p.cod_genero].mayor_puntaje < p.puntaje_criticas )then begin 
-      v[p.cod_genero].mayor_puntaje := p.puntaje_criticas;
-      v[p.cod_genero].codigo := p.cod_pelicula;
-    end;
-  end; 
-procedure recorrerlista(l:lista; var v:vector);
-  begin 
+    mayor:=0;
     while (l <> nil)do begin 
-      cada_genero (v,l^.dato);
-      l:= l^.sig;
+      if(l^.dato.puntaje_criticas > mayor)then begin 
+        codi:= l^.dato.cod_pelicula;
+        mayor:= l^.dato.puntaje_criticas;
+      end;
+      l:=l^.sig;
+    end;
+    codigo:= codi;
+    puntaje_mayor:= mayor;
+  end;
+procedure recorrervector (v:vector; var mp:mayor_puntaje );
+  var 
+    i:integer;
+  begin 
+    for i := 1 to 8 do begin 
+      mayor(v[i],mp[i].cod_peli,mp[i].puntaje);
     end;
   end;
-procedure insercion (var v:vector);
+procedure insercion (var mp:mayor_puntaje);
   var 
     i,j: integer;
-    actual: pelicula;
+    actual: peli;
   begin
     for i := 2 to 8 do begin 
-      actual := v[i];
+      actual := mp[i];
       j:= i - 1;
-      while(j > 0) and (v[j].mayor_puntaje < actual.mayor_puntaje) do begin 
-         v[j+1] := v[j];
+      while(j > 0) and (mp[j].puntaje < actual.puntaje) do begin 
+         mp[j+1] := mp[j];
          j :=j -1;
       end;
-      v[j+1]:= actual;
+      mp[j+1]:= actual;
     end; 
   end;
-procedure mayor_y_menor (v:vector);
+procedure mayor_y_menor (mp:mayor_puntaje);
   begin 
-    writeln('el codigo de pelicula con mas puntaje es: ',v[1].codigo,' con un puntaje de ',v[1].mayor_puntaje );
-    writeln('el codigo de pelicula con menor puntaje es: ',v[8].codigo,' con un puntaje de ',v[8].mayor_puntaje );
+    writeln('el codigo de pelicula con mas puntaje es: ',mp[1].cod_peli,' con un puntaje de ',mp[1].puntaje );
+    writeln('el codigo de pelicula con menor puntaje es: ',mp[8].cod_peli,' con un puntaje de ',mp[8].puntaje );
   end;
 var 
-  l:lista;
   v:vector;
+  mp:mayor_puntaje;
 begin 
-  l:= nil;
-  inicializarvector(v);
-  cargarlista(l);
-  recorrerlista(l,v);
-  insercion(v);
-  mayor_y_menor(v);
+  inicializarvector(mp);
+  cargarvector(v);
+  recorrervector(v,mp);
+  insercion(mp);
+  mayor_y_menor(mp);
 end.
