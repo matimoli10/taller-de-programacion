@@ -1,0 +1,106 @@
+2.- Escribir un programa que:
+a. Implemente un módulo recursivo que genere y retorne una lista de números enteros
+“random” en el rango 100-200. Finalizar con el número 100.
+b. Un módulo recursivo que reciba la lista generada en a) e imprima los valores de la lista en el
+mismo orden que están almacenados.
+c. Implemente un módulo recursivo que reciba la lista generada en a) e imprima los valores de
+la lista en orden inverso al que están almacenados.
+d. Implemente un módulo recursivo que reciba la lista generada en a) y devuelva el mínimo
+valor de la lista.
+e. Implemente un módulo recursivo que reciba la lista generada en a) y un valor y devuelva
+verdadero si dicho valor se encuentra en la lista o falso en caso contrario.
+
+
+program ejercicio_2;
+const 
+  min = 100;
+  max = 200; 
+type 
+  lista = ^nodo;
+  nodo = record 
+    dato: integer;
+    sig: lista;
+  end;
+procedure numerorandom(var num: integer);
+begin 
+  num := min + random(max - min + 1);
+end;
+procedure agregaradelante(var l: lista; num: integer);
+var
+  aux: lista;
+begin 
+  new (aux);
+  aux^.dato := num;
+  aux^.sig := l;
+  l := aux;
+end;
+procedure cargarlistarecursivo (var l:lista);
+var 
+  num: integer;
+begin 
+  numerorandom(num);
+  if(num <> 100)then begin 
+    agregaradelante(l,num);
+    cargarlistarecursivo(l);
+  end
+  else begin 
+    agregaradelante(l,num);
+  end;
+end;
+procedure imprime_mismo_orden(l:lista);
+begin
+  if(l <> nil)then begin 
+    writeln(l^.dato);
+    imprime_mismo_orden(l^.sig);
+  end;
+end; 
+procedure imprime_orden_inverso(l:lista);
+begin 
+  if(l <> nil)then begin
+    imprime_orden_inverso(l^.sig);
+    writeln(l^.dato);
+  end;
+end;
+function minimo_valor(l: lista; min_valor: integer ): integer;
+begin 
+  if(l <> nil)then begin 
+	if(min_valor > l^.dato)then begin 
+      min_valor := l^.dato;
+	end;
+    minimo_valor(l^.sig,min_valor);
+  end;
+  minimo_valor := min_valor;
+end;
+function buscar_valor(l: lista; valor: integer): boolean;
+
+begin 
+  if(l <> nil) and (valor <> l^.dato) then begin 
+    buscar_valor := buscar_valor(l^.sig,valor);
+  end
+  else begin 
+    if(l <> nil)then begin 
+      buscar_valor := true;
+    end
+    else begin 
+      buscar_valor := false;
+    end;
+  end; 
+end;
+var 
+  l:lista;
+  min_valor: integer;
+  valor: integer;
+begin 
+  l := nil;
+  min_valor:=9999;
+  cargarlistarecursivo(l);
+  writeln('termino de cargar la lista ');
+  imprime_mismo_orden(l);
+  writeln('ahora en orden inverso ');
+  imprime_orden_inverso(l);
+  writeln('busco el minimo ');
+  writeln('el valor minimo es: ',minimo_valor(l,min_valor));
+  writeln('ingrese el valor a buscar en la lista: ');
+  readln(valor);
+  writeln('el valor esta en la lista ? ',buscar_valor(l,valor));
+end.
