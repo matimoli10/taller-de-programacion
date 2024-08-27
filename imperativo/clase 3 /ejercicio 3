@@ -22,7 +22,7 @@ procedure cargarvector(var v: vector; diml: integer);
   var 
     num: integer;
   begin 
-    num := min - random(max - min + 1);
+    num := min + random(max - min + 1);
     if(diml < dimf)then begin
       v[diml]:= num;
       cargarvector(v, diml+1);
@@ -55,22 +55,36 @@ Procedure busquedaDicotomica (v: vector; ini,fin: rango; dato:integer; var pos: 
   begin 
     while (ini <> fin)do begin 
       medio := (ini + fin) div 2;
-      if(v[medio] > v[dato])then begin 
+      if(medio <> ini) and (medio <> fin)then begin 
+        if(v[medio] < dato)then begin 
         ini:= medio;
-      end
-      else begin 
-        if(v[medio] < v[dato])then begin 
-          fin:= medio;
         end
         else begin 
-          if(v[medio] = v[dato])then begin 
-            pos := medio;
+          if(v[medio] > dato)then begin 
+            fin:= medio; 
           end
           else begin 
-            pos := -1;
+            ini := fin;
           end;
         end;
+      end
+      else begin 
+        ini := fin;
       end;
+    end;
+    if(v[medio] = dato)then begin 
+      pos := medio;
+    end
+    else begin 
+      pos := -1; 
+    end;
+  end;
+procedure mostrarvalores(v:vector);
+  var 
+    i: rango;
+  begin 
+    for i := 1 to dimf do begin 
+      writeln(v[i]);
     end;
   end;
 var 
@@ -83,15 +97,16 @@ begin
   diml:= 1;
   ini := diml;
   cargarvector(v,diml);
-  fin := diml;
+  fin := dimf;
   writeln('ya esta cargado el vector');
   seleccion(v);
   writeln('ya esta ordenado el vector de menor a moyor ');
+  mostrarvalores(v);
   writeln('ingrese le valor que quiere buscar en el vector ');
   readln(dato);
   busquedaDicotomica(v,ini,fin,dato,pos);
   if(pos <> -1)then begin 
-    writeln('el valor ',v[pos],' se encuentra en la posicion',pos );
+    writeln('el valor ',v[pos],' se encuentra en la posicion ',pos );
   end
   else begin 
     writeln('el valor ingresado no se a encontrado en el vector');
