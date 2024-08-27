@@ -105,10 +105,13 @@ end;
 function  BuscarValor (v: vector; dimL, valor: integer): boolean;
 begin
   if( diml <> 0 ) and (valor <> v[diml])then begin 
-    BuscarValor(v,diml-1,valor);
+    writeln(valor);
+    writeln(v[diml]);
+    writeln(' ');
+    BuscarValor:= BuscarValor(v,diml-1,valor);
   end
   else begin 
-    if( valor = v[diml])then begin 
+    if(valor = v[diml])then begin 
       BuscarValor := true;
     end
     else begin 
@@ -116,20 +119,24 @@ begin
     end;
   end;
 end; 
-
+procedure separo_digitos(valorleido:integer; num:integer);
+  begin 
+    if(valorleido <> 0)then begin 
+      num:= valorleido mod 10;
+      valorleido := valorleido div 10;
+      separo_digitos(valorleido,num);
+      writeln(num);
+    end;
+  end;
 procedure ImprimirDigitos (v: vector; dimL: integer);
 var 
   valorleido: integer;
   num: integer;
 begin    
   if(diml <> 0)then begin 
-    valorleido:= v[diml];
-    while (valorleido <> 0)do begin 
-      num:= valorleido mod 10;
-      writeln(num);
-      writeln(diml);
-      valorleido := valorleido div 10;
-    end;
+    valorleido := v[diml];
+    writeln(' ');
+    separo_digitos(valorleido,num);
     ImprimirDigitos(v,diml-1);
   end;      
 end; 
@@ -180,7 +187,7 @@ Begin
   
   writeln;
   writeln;
-  
+  writeln(encontre);
   if (encontre) then begin 
     writeln('El ', valor, ' esta en el vector');
   end
