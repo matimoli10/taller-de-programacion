@@ -145,6 +145,7 @@ var dimL, suma, maximo, valor, valor_max: integer;
     v: vector;
     encontre: boolean;
 Begin
+  randomize;
   valor_max := 0; 
   CargarVector (v, dimL);
   
