@@ -91,6 +91,7 @@ var
   min_valor: integer;
   valor: integer;
 begin 
+  randomize;
   l := nil;
   min_valor:=9999;
   cargarlistarecursivo(l);
