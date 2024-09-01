@@ -224,6 +224,8 @@ begin
   cant := 0;
   cargar_arbol(a);
   impar (a,cant);	
+  writeln('');
+  writeln('la cantidad de alumnos con legajo impar son: ',cant);
   cant_aprobados(a);
   writeln('ingrese un valor');
   readln(valor);
