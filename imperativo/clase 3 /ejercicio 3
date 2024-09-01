@@ -1,115 +1,232 @@
-3.- Implementar un programa que invoque a los siguientes módulos.
-a. Un módulo recursivo que retorne un vector de 20 números enteros “random” mayores a 300
-y menores a 1550 (incluidos ambos).
-b. Un módulo que reciba el vector generado en a) y lo retorne ordenado. (Utilizar lo realizado
-en la práctica anterior)
-c. Un módulo que realice una búsqueda dicotómica en el vector, utilizando el siguiente
-encabezado:
-Procedure busquedaDicotomica (v: vector; ini,fin: indice; dato:integer; var pos: indice);
-Nota: El parámetro “pos” debe retornar la posición del dato o -1 si el dato no se encuentra
-en el vector.
+3. Implementar un programa que contenga:
+a. Un módulo que lea información de los finales rendidos por los alumnos de la Facultad de
+Informática y los almacene en una estructura de datos. La información que se lee es legajo,
+código de materia, fecha y nota. La lectura de los alumnos finaliza con legajo 0. La estructura
+generada debe ser eficiente para la búsqueda por número de legajo y para cada alumno deben
+guardarse los finales que rindió en una lista.
+b. Un módulo que reciba la estructura generada en a. y retorne la cantidad de alumnos con
+legajo impar.
+c. Un módulo que reciba la estructura generada en a. e informe, para cada alumno, su legajo y
+su cantidad de finales aprobados (nota mayor o igual a 4).
+c. Un módulo que reciba la estructura generada en a. y un valor real. Este módulo debe
+retornar los legajos y promedios de los alumnos cuyo promedio supera el valor ingresado.
+
 
 
 program ejercicio_3;
-const 
-  dimf = 20;
-  min = 300;
-  max = 1550;
 type 
-  rango = 1..dimf;
-  vector = array [rango] of integer;
-procedure cargarvector(var v: vector; diml: integer);
-  var 
-    num: integer;
-  begin 
-    num := min + random(max - min + 1);
-    if(diml < dimf)then begin
-      v[diml]:= num;
-      cargarvector(v, diml+1);
-    end
-    else begin 
-      v[diml]:= num;
+  finales = record
+    legajo: integer;
+    cod_materia: integer;
+    fecha: integer;
+    nota: integer;
+  end;
+  
+  rindio_final = record
+    cod_materia:integer;
+    fecha: integer;
+    nota: integer;
+  end;
+  
+  lista = ^nodolista;
+    nodolista = record
+      dato: rindio_final;
+      sig : lista;
     end;
-  end;	
-procedure seleccion (var v:vector);
-  var 
-    i,j,pos :integer;
-    actual: integer;
+    
+  alumno = record
+    num_legajo: integer;
+    rindio_finales: lista;
+  end;
+  
+  supera = record
+    legajo:integer;
+    promedio: real;
+  end;
+  
+  lista2 = ^nodo2;
+    nodo2 = record
+      dato: supera;
+      sig: lista2;
+    end;
+  
+  arbol = ^nodo;
+    nodo = record
+      dato: alumno;
+      hi: arbol;
+      hd: arbol;
+    end;
+
+procedure cargo_finales(var f:finales);
   begin 
-    for i:= 1 to dimf-1 do begin 
-      j:= i - 1;
-      pos := i;
-      for j := i+1 to dimf do begin 
-        if(v[j] < v[pos])then begin 
-          pos := j;
-        end;
-      end;
-      actual:= v[pos];
-      v[pos]:= v[i];
-      v[i]:= actual;
+    writeln('ingrese el legajo ');
+    readln(f.legajo);
+    if(f.legajo <> 0)then begin 
+      writeln('ingrese el codigo de la materia ');
+      readln(f.cod_materia);
+      writeln('ingrese la fecha ');
+      readln(f.fecha);
+      writeln('ingrese la nota ');
+      readln(f.nota);
     end;
   end;
-Procedure busquedaDicotomica (v: vector; ini,fin: rango; dato: integer; var pos: integer);
-  var
-    medio: integer;
+procedure cargo_rf(var rf:rindio_final; f:finales);
   begin 
-    while (ini <> fin)do begin 
-      medio := (ini + fin) div 2;
-      if(medio <> ini) and (medio <> fin)then begin 
-        if(v[medio] < dato)then begin 
-        ini:= medio;
-        end
-        else begin 
-          if(v[medio] > dato)then begin 
-            fin:= medio; 
-          end
-          else begin 
-            ini := fin;
-          end;
-        end;
+    rf.cod_materia := f.cod_materia;
+    rf.fecha := f.fecha;
+    rf.nota := f.nota;
+  end;
+procedure agregaradelante(var l: lista; rf: rindio_final);
+  var 
+    aux:lista;
+  begin 
+    new(aux);
+    aux^.dato := rf;
+    aux^.sig := l;
+    l := aux;
+  end;
+procedure agregar_arbol(var a:arbol;f: finales; rf:rindio_final);
+  begin 
+    if(a = nil)then begin 
+      new(a);
+      a^.dato.num_legajo := f.legajo;
+      a^.dato.rindio_finales := nil;
+      agregaradelante(a^.dato.rindio_finales,rf);
+      a^.hi := nil;
+      a^.hd := nil;
+    end
+    else begin 
+      if(a^.dato.num_legajo = f.legajo)then begin 
+        agregaradelante(a^.dato.rindio_finales,rf);
       end
       else begin 
-        ini := fin;
+        if(a^.dato.num_legajo <= f.legajo )then begin 
+          agregar_arbol(a^.hi,f,rf);
+        end
+        else begin
+          agregar_arbol(a^.hd,f,rf);
+        end;
       end;
     end;
-    if(v[medio] = dato)then begin 
-      pos := medio;
+  end;
+procedure cargar_arbol(var a:arbol);
+  var 
+    f: finales;
+    rf: rindio_final;
+  begin 
+    cargo_finales(f);
+    while (f.legajo <> 0)do begin 
+      cargo_rf(rf,f);
+      agregar_arbol(a,f,rf);
+      cargo_finales(f);
+    end;
+  end;
+function cumple (legajo: integer): boolean;
+  begin 
+    legajo:= legajo mod 10;
+    if(legajo div 2 = 0)then begin
+      cumple := true
     end
     else begin 
-      pos := -1; 
+      cumple:= false;
     end;
   end;
-procedure mostrarvalores(v:vector);
-  var 
-    i: rango;
+procedure impar(a: arbol; var cant: integer);
   begin 
-    for i := 1 to dimf do begin 
-      writeln(v[i]);
+    if(a <> nil)then begin 
+      impar(a^.hi,cant);
+      impar(a^.hd,cant);
+      if(cumple(a^.dato.num_legajo) = true)then begin 
+        cant:= cant + 1;
+      end;
+    end;
+  end;  
+procedure aprobados (l: lista; var cantidad:integer);
+  begin 
+    while (l <> nil)do begin 
+      if(l^.dato.nota >= 4)then begin
+        cantidad := cantidad + 1;
+      end;
+      l:=l^.sig;
     end;
   end;
-var 
-  v: vector;
-  diml: integer;
-  ini,fin: rango;
-  dato: integer;
-  pos: integer;
-begin 
-  randomize;
-  diml:= 1;
-  ini := diml;
-  cargarvector(v,diml);
-  fin := dimf;
-  writeln('ya esta cargado el vector');
-  seleccion(v);
-  writeln('ya esta ordenado el vector de menor a moyor ');
-  mostrarvalores(v);
-  writeln('ingrese le valor que quiere buscar en el vector ');
-  readln(dato);
-  busquedaDicotomica(v,ini,fin,dato,pos);
-  if(pos <> -1)then begin 
-    writeln('el valor ',v[pos],' se encuentra en la posicion ',pos );
-  end
-  else begin 
-    writeln('el valor ingresado no se a encontrado en el vector');
+procedure cant_aprobados (a: arbol);
+  var 
+    cantidad: integer;
+  begin 
+    cantidad := 0;
+    if(a <> nil)then begin 
+      cant_aprobados(a^.hi);
+      cant_aprobados(a^.hd);
+      aprobados(a^.dato.rindio_finales,cantidad);
+      writeln('');
+      writeln('el alumno con legajo: ',a^.dato.num_legajo,' aprobo un total de ',cantidad,' finales');
+    end;
   end;
+procedure recorrerlista(l:lista; var suma: integer; var cant: integer);
+  begin 
+    while(l <> nil)do begin 
+      suma := suma + l^.dato.nota ;
+      cant := cant + 1;
+      l := l^.sig;
+    end;
+  end;
+procedure asigno_s(var s: supera; legajo : integer; prom: real);
+  begin 
+    s.legajo := legajo;
+    s.promedio := prom;
+  end;
+procedure agregar_adelante(var l2: lista2; s: supera);
+  var 
+    aux: lista2;
+  begin 
+    new(aux);
+    aux^.dato := s;
+    aux^.sig := l2;
+    l2 := aux;
+  end;
+procedure saco_promedio (a: arbol; valor: real; var l2: lista2);
+  var 
+    prom: real;
+    suma: integer;
+    cant: integer;
+    s:supera;
+  begin 
+    suma := 0;
+    cant := 0;
+    if(a <> nil)then begin
+      saco_promedio(a^.hi,valor,l2);
+      saco_promedio(a^.hd,valor,l2);
+      recorrerlista(a^.dato.rindio_finales,suma,cant);
+      prom:= suma div cant;
+      if(prom >= valor)then begin 
+        asigno_s(s,a^.dato.num_legajo,prom);
+        agregar_adelante(l2,s);
+      end;
+    end;
+  end;
+procedure recorrerlista2(l2: lista2);
+  begin 
+    while(l2 <> nil )do begin 
+      writeln('el alumno con legajo ',l2^.dato.legajo,' tiene un promedio de: ',l2^.dato.promedio);
+      l2:= l2^.sig;
+    end;
+  end; 
+
+var 
+  a:arbol;
+  cant: integer;
+  valor: real;
+  l2:lista2;
+begin
+  a:= nil;
+  l2 := nil;
+  cant := 0;
+  cargar_arbol(a);
+  impar (a,cant);	
+  cant_aprobados(a);
+  writeln('ingrese un valor');
+  readln(valor);
+  saco_promedio(a,valor,l2);
+  recorrerlista2(l2);
 end.
