@@ -1,107 +1,252 @@
-2.- Escribir un programa que:
-a. Implemente un módulo recursivo que genere y retorne una lista de números enteros
-“random” en el rango 100-200. Finalizar con el número 100.
-b. Un módulo recursivo que reciba la lista generada en a) e imprima los valores de la lista en el
-mismo orden que están almacenados.
-c. Implemente un módulo recursivo que reciba la lista generada en a) e imprima los valores de
-la lista en orden inverso al que están almacenados.
-d. Implemente un módulo recursivo que reciba la lista generada en a) y devuelva el mínimo
-valor de la lista.
-e. Implemente un módulo recursivo que reciba la lista generada en a) y un valor y devuelva
-verdadero si dicho valor se encuentra en la lista o falso en caso contrario.
-
-
 program ejercicio_2;
-const 
-  min = 100;
-  max = 200; 
 type 
-  lista = ^nodo;
-  nodo = record 
-    dato: integer;
-    sig: lista;
+  ventas = record
+    cod_producto : integer;
+    fecha : integer;
+    cantidad_vendida : integer;
+  end; 
+  
+  arbol =^nodo;
+    nodo = record
+      dato: ventas;
+      hi : arbol;
+      hd : arbol; 
+    end;
+    
+  vendidos = record 
+    codigo_productos: integer;
+    cantidades_vendidas: integer;
   end;
-procedure numerorandom(var num: integer);
-begin 
-  num := min + random(max - min + 1);
-end;
-procedure agregaradelante(var l: lista; num: integer);
-var
-  aux: lista;
-begin 
-  new (aux);
-  aux^.dato := num;
-  aux^.sig := l;
-  l := aux;
-end;
-procedure cargarlistarecursivo (var l:lista);
-var 
-  num: integer;
-begin 
-  numerorandom(num);
-  if(num <> 100)then begin 
-    agregaradelante(l,num);
-    cargarlistarecursivo(l);
-  end
-  else begin 
-    agregaradelante(l,num);
+  
+  arbol2 = ^nodo2;
+    nodo2 = record
+      dato: vendidos; 
+      hi: arbol2;
+      hd: arbol2;
+    end;
+   
+  lista =^nodolista;
+    nodolista = record
+      dato: ventas;
+      sig: lista;
+    end;
+  
+  ventas_ordenadas = record
+    cod_product : integer;
+    ventas_del_producto: lista;
   end;
-end;
-procedure imprime_mismo_orden(l:lista);
-begin
-  if(l <> nil)then begin 
-    writeln(l^.dato);
-    imprime_mismo_orden(l^.sig);
+  
+  arbol3 = ^nodo3;
+    nodo3 = record
+      dato: ventas_ordenadas;
+      hi: arbol3;
+      hd: arbol3;
+    end;
+    
+procedure mostrardatos(v:ventas);
+  begin 
+    writeln(' ');
+    writeln('codigo de producto ',v.cod_producto);
+    writeln('fecha ',v.fecha);
+    writeln('cantidad vendida ',v.cantidad_vendida);
   end;
-end; 
-procedure imprime_orden_inverso(l:lista);
-begin 
-  if(l <> nil)then begin
-    imprime_orden_inverso(l^.sig);
-    writeln(l^.dato);
+  
+procedure ingresardatosrandom(var v:ventas );
+  begin 
+    v.cod_producto := random(10);
+    if(v.cod_producto <> 0)then begin
+      v.fecha := random(10);
+      v.cantidad_vendida := random(10);
+    end;
   end;
-end;
-function minimo_valor(l: lista; min_valor: integer ): integer;
-begin 
-  if(l <> nil)then begin 
-	if(min_valor > l^.dato)then begin 
-      min_valor := l^.dato;
-	end;
-    minimo_valor(l^.sig,min_valor);
-  end;
-  minimo_valor := min_valor;
-end;
-function buscar_valor(l: lista; valor: integer): boolean;
-
-begin 
-  if(l <> nil) and (valor <> l^.dato) then begin 
-    buscar_valor := buscar_valor(l^.sig,valor);
-  end
-  else begin 
-    if(l <> nil)then begin 
-      buscar_valor := true;
+  
+procedure agregararbol(var a:arbol ; v:ventas);
+  begin
+    if(a = nil)then begin 
+      new(a);
+      a^.dato := v;
+      a^.hi := nil;
+      a^.hd := nil;
     end
     else begin 
-      buscar_valor := false;
+      if(a^.dato.cod_producto < v.cod_producto)then begin 
+        agregararbol(a^.hi,v);
+      end
+      else begin 
+        agregararbol(a^.hd,v);
+      end;
     end;
-  end; 
-end;
-var 
-  l:lista;
-  min_valor: integer;
-  valor: integer;
-begin 
+  end;
+  
+procedure asigno (var v1: vendidos; v: ventas);
+  begin
+    v1.codigo_productos := v.cod_producto ;
+    v1.cantidades_vendidas := v.cantidad_vendida;
+  end;
+  
+procedure agregararbol2 (var a2: arbol2; v1: vendidos);
+  begin 
+    if(a2 = nil)then begin 
+      new(a2);
+      a2^.dato := v1;
+      a2^.hd := nil;
+      a2^.hi := nil;
+    end
+    else begin 
+      if(a2^.dato.codigo_productos = v1.codigo_productos) then begin 
+        a2^.dato.cantidades_vendidas := a2^.dato.cantidades_vendidas + v1.cantidades_vendidas;
+      end
+      else begin 
+        if(a2^.dato.codigo_productos < v1.codigo_productos)then begin 
+          agregararbol2(a2^.hi,v1);
+        end
+        else begin 
+          agregararbol2(a2^.hd,v1);
+        end;
+      end;
+    end;
+  end;
+  
+procedure agregaradelante (var l: lista;v: ventas);
+  var 
+    aux:lista;
+  begin 
+    new(aux);
+    aux^.dato := v;
+    aux^.sig := l;
+    l:= aux;
+  end;
+  
+procedure agregararbol3(var a3: arbol3; v: ventas);
+  begin 
+    if(a3 = nil)then begin 
+      new(a3);
+      a3^.dato.cod_product := v.cod_producto;
+      a3^.dato.ventas_del_producto := nil;
+      agregaradelante(a3^.dato.ventas_del_producto,v);
+      a3^.hi := nil;
+      a3^.hd := nil;
+    end
+    else begin 
+      if(a3^.dato.cod_product = v.cod_producto)then begin 
+        agregaradelante(a3^.dato.ventas_del_producto,v);
+      end
+      else begin 
+        if(a3^.dato.cod_product < v.cod_producto)then begin 
+          agregararbol3(a3^.hi,v);
+        end
+        else begin
+          agregararbol3(a3^.hd,v);
+        end;
+      end;
+    end;
+  end;
+  
+procedure cargar_arbol(var a:arbol;var a2:arbol2; var a3:arbol3);
+  var 
+    v: ventas;
+    v1: vendidos;
+  begin 
+    ingresardatosrandom(v);
+    while (v.cod_producto <> 0) do begin 
+      mostrardatos(v);
+      agregararbol(a,v);
+      asigno(v1,v);
+      agregararbol2(a2,v1);
+      agregararbol3(a3,v);
+      ingresardatosrandom(v);
+    end;
+  end;
+procedure busco_productos (a: arbol; elijo_fecha: integer;var total_productos: integer);
+  begin 
+    if(a <> nil)then begin 
+      busco_productos (a^.hi,elijo_fecha,total_productos);
+      busco_productos (a^.hd,elijo_fecha,total_productos);
+      if(a^.dato.fecha = elijo_fecha)then begin 
+        total_productos := total_productos + a^.dato.cantidad_vendida;
+      end;
+    end;
+  end;
+procedure mayor_cantidad(a2: arbol2; var cant: integer; var cod_mas_vendido: integer );
+  begin 
+    if(a2 <> nil)then begin 
+      mayor_cantidad(a2^.hi,cant,cod_mas_vendido);
+      mayor_cantidad(a2^.hd,cant,cod_mas_vendido);
+      if(cant < a2^.dato.cantidades_vendidas)then begin 
+        if( cant = 0)then begin 
+          cod_mas_vendido := a2^.dato.codigo_productos;
+          cant := a2^.dato.cantidades_vendidas;
+        end
+        else begin  
+          if(a2^.dato.codigo_productos = cod_mas_vendido)then begin 
+            cant:= cant + a2^.dato.cantidades_vendidas;
+          end
+          else begin 
+            cod_mas_vendido := a2^.dato.codigo_productos;
+            cant := a2^.dato.cantidades_vendidas;
+          end;
+        end;
+      end;
+    end;
+  end;
+function recorrer (l:lista): integer;
+  var 
+    cant:integer;
+  begin 
+    cant:=0;
+    while (l <> nil)do begin 
+     { writeln('    ',l^.dato.cod_producto);}
+      cant:= cant + 1;
+      l := l^.sig;
+    end;
+    recorrer := cant;
+  end;
+procedure mayor_ventas (a3: arbol3;var cant_ventas:integer;var cod_mas_ventas: integer);
+  var 
+    act_cant:integer;
+  begin 
+    if(a3 <> nil)then begin 
+      mayor_ventas (a3^.hi,cant_ventas,cod_mas_ventas);
+      mayor_ventas(a3^.hd,cant_ventas,cod_mas_ventas);
+      {writeln('',a3^.dato.cod_product);}
+      act_cant := recorrer(a3^.dato.ventas_del_producto);
+      if(cant_ventas < act_cant)then begin 
+        cod_mas_ventas := a3^.dato.cod_product; 
+        cant_ventas := act_cant; 
+      end;
+    end;
+    
+  end;
+  
+var
+  a: arbol;
+  a2: arbol2;
+  a3: arbol3;
+  elijo_fecha : integer;
+  total_productos: integer;
+  cant: integer;
+  cod_mas_vendido: integer;
+  cant_ventas: integer;
+  cod_mas_ventas: integer;
+begin  
+  a := nil;
+  a2 := nil;
+  a3 := nil;
   randomize;
-  l := nil;
-  min_valor:=9999;
-  cargarlistarecursivo(l);
-  writeln('termino de cargar la lista ');
-  imprime_mismo_orden(l);
-  writeln('ahora en orden inverso ');
-  imprime_orden_inverso(l);
-  writeln('busco el minimo ');
-  writeln('el valor minimo es: ',minimo_valor(l,min_valor));
-  writeln('ingrese el valor a buscar en la lista: ');
-  readln(valor);
-  writeln('el valor esta en la lista ? ',buscar_valor(l,valor));
+  total_productos:= 0;
+  cant:= 0;
+  cant_ventas := 0;
+  cargar_arbol (a,a2,a3);
+  writeln('');
+  writeln('ingrese la fecha en la que quiere buscar ');
+  readln(elijo_fecha);
+  busco_productos(a,elijo_fecha,total_productos);
+  writeln(' ');
+  writeln('la cantidad de productos vendidas en la fecha: ',elijo_fecha,' es: ',total_productos);
+  mayor_cantidad(a2,cant,cod_mas_vendido);
+  writeln(' ');
+  writeln('el codigo del producto con mayor cantidad de unidades vendidas es: ',cod_mas_vendido,' con una cantidad de: ',cant);
+  mayor_ventas(a3,cant_ventas,cod_mas_ventas);
+  writeln(' ');
+  writeln('el codigo de producto con mayor cantidad de ventas es: ',cod_mas_ventas,' con una cantidad de: ',cant_ventas);
 end.
