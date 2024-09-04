@@ -266,8 +266,8 @@ begin
 end;
 
 var a: arbol; 
-cant : integer;
-prom : real;
+  cant : integer;
+  prom : real;
 Begin
   randomize;
   prom := 0;
