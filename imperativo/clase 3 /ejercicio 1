@@ -1,203 +1,284 @@
-1.- Descargar el programa ImperativoEjercicioClase2.pas que contiene parte del código del
+1. Descargar el programa ImperativoEjercicioClase3.pas que contiene parte del código del
 siguiente enunciado a resolver. Implementar lo indicado en el código.
-Implementar un programa que invoque a los siguientes módulos.
-a. Un módulo recursivo que retorne un vector de a lo sumo 15 números enteros “random”
-mayores a 10 y menores a 155 (incluidos ambos). La carga finaliza con el valor 20.
-b. Un módulo no recursivo que reciba el vector generado en a) e imprima el contenido del
-vector.
-c. Un módulo recursivo que reciba el vector generado en a) e imprima el contenido del vector.
-d. Un módulo recursivo que reciba el vector generado en a) y devuelva la suma de los valores
-pares contenidos en el vector.
-e. Un módulo recursivo que reciba el vector generado en a) y devuelva el máximo valor del
-vector.
-f. Un módulo recursivo que reciba el vector generado en a) y un valor y devuelva verdadero si
-dicho valor se encuentra en el vector o falso en caso contrario.
-g. Un módulo que reciba el vector generado en a) e imprima, para cada número contenido en
-el vector, sus dígitos en el orden en que aparecen en el número. Debe implementarse un
-módulo recursivo que reciba el número e imprima lo pedido. Ejemplo si se lee el valor 142, se
-debe imprimir 1 4 2.
+Escribir un programa que:
+a. Implemente un módulo que almacene información de socios de un club en un árbol binario
+de búsqueda. De cada socio se debe almacenar número de socio, nombre y edad. La carga
+finaliza con el número de socio 0 y el árbol debe quedar ordenado por número de socio. La
+información de cada socio debe generarse aleatoriamente.
+b. Una vez generado el árbol, realice módulos independientes que reciban el árbol como
+parámetro y que :
+i. Informar los datos de los socios en orden creciente.
+ii. Informar los datos de los socios en orden decreciente.
+iii. Informar el número de socio con mayor edad. Debe invocar a un módulo recursivo que
+retorne dicho valor.
+iv. Aumentar en 1 la edad de los socios con edad impar e informar la cantidad de socios
+que se les aumentó la edad.
+vi. Leer un nombre e informar si existe o no existe un socio con ese nombre. Debe invocar
+a un módulo recursivo que reciba el nombre leído y retorne verdadero o falso.
+vii. Informar la cantidad de socios. Debe invocar a un módulo recursivo que retorne dicha
+cantidad.
+viii. Informar el promedio de edad de los socios. Debe invocar a un módulo recursivo que
+retorne el promedio de las edades de los socios.
 
 
-Program Clase2MI;
-const dimF = 15;
-      min = 10;
-      max = 155;
-type vector = array [1..dimF] of integer;
+Program ImperativoClase3;
+
+type rangoEdad = 12..100;
+     cadena15 = string [15];
+     socio = record
+               numero: integer;
+               nombre: cadena15;
+               edad: rangoEdad;
+             end;
+     arbol = ^nodoArbol;
+     nodoArbol = record
+                    dato: socio;
+                    HI: arbol;
+                    HD: arbol;
+                 end;
      
+procedure GenerarArbol (var a: arbol);
+{ Implementar un modulo que almacene informacion de socios de un club en un arbol binario de busqueda. De cada socio se debe almacenar numero de socio, 
+nombre y edad. La carga finaliza con el numero de socio 0 y el arbol debe quedar ordenado por numero de socio. La informacion de cada socio debe generarse
+aleatoriamente. }
 
-procedure CargarVector (var v: vector; var dimL: integer);
-
-  procedure CargarVectorRecursivo (var v: vector; var dimL: integer);
-  var valor: integer;
-  begin
-    valor:= min + random (max - min + 1);
-    if ((valor <> 20 ) and (dimL < dimF)) 
-    then begin
-          dimL:= dimL + 1;
-          v[dimL]:= valor;
-          CargarVectorRecursivo (v, dimL);
-         end;
-  end;
+  Procedure CargarSocio (var s: socio);
+  var vNombres:array [0..9] of string= ('ana', 'jose', 'luis', 'ema', 'ariel', 'pedro', 'lena', 'lisa', 'martin', 'lola'); 
   
-begin
-  dimL:= 0;
-  CargarVectorRecursivo (v, dimL);
-end;
- 
-procedure ImprimirVector (v: vector; dimL: integer);
-var
-   i: integer;
-begin
-     for i:= 1 to dimL do
-         write ('----');
-     writeln;
-     write (' ');
-     for i:= 1 to dimL do begin
-        write(v[i], ' | ');
-     end;
-     writeln;
-     for i:= 1 to dimL do
-         write ('----');
-     writeln;
-     writeln;
-End;     
-
-procedure ImprimirVectorRecursivo (v: vector; dimL: integer);
-begin
-     writeln('el valor es: ',v[diml]);    
-     if( diml <> 0 )then begin 
-       ImprimirVectorRecursivo(v,diml-1);       
-     end;     
-end; 
-    
-function Sumar (v: vector; dimL: integer): integer; 
-
-  function SumarRecursivo (v: vector; pos, dimL: integer): integer;
-
+  begin
+    s.numero:= random (51) * 100;
+    If (s.numero <> 0)
+    then begin
+           s.nombre:= vNombres[random(10)];
+           s.edad:= 12 + random (79);
+         end;
+  end;  
+  
+  Procedure InsertarElemento (var a: arbol; elem: socio);
   Begin
-    if (pos <= dimL) then begin 
-      SumarRecursivo:= SumarRecursivo (v, pos + 1, dimL) + v[pos] ; 
-    end
-    else begin 
-      SumarRecursivo:=0;  
-    end;
-  End;	
- 
-var pos: integer; 
-begin
- pos:= 1;
- Sumar:= SumarRecursivo (v, pos, dimL);
+    if (a = nil) 
+    then begin
+           new(a);
+           a^.dato:= elem; 
+           a^.HI:= nil; 
+           a^.HD:= nil;
+         end
+    else if (elem.numero < a^.dato.numero) 
+         then InsertarElemento(a^.HI, elem)
+         else InsertarElemento(a^.HD, elem); 
+  End;
+
+var unSocio: socio;  
+Begin
+ writeln;
+ writeln ('----- Ingreso de socios y armado del arbol ----->');
+ writeln;
+ a:= nil;
+ CargarSocio (unSocio);
+ while (unSocio.numero <> 0)do
+  begin
+   InsertarElemento (a, unSocio);
+   CargarSocio (unSocio);
+  end;
+ writeln;
+ writeln ('//////////////////////////////////////////////////////////');
+ writeln;
 end;
 
-function  ObtenerMaximo (v: vector; dimL: integer; valor_max: integer): integer;
-begin
-  if( diml <> 0 )then begin 
-     if (valor_max < v[diml])then begin 
-        writeln('el valor es: ',valor_max);
-        valor_max := v[diml];
-        writeln('el valor es: ',valor_max);
-     end;  
-     ObtenerMaximo(v,diml-1,valor_max);
+procedure InformarSociosOrdenCreciente (a: arbol);
+{ Informar los datos de los socios en orden creciente. }
+  
+  procedure InformarDatosSociosOrdenCreciente (a: arbol);
+  begin
+    if ((a <> nil) and (a^.HI <> nil))
+    then InformarDatosSociosOrdenCreciente (a^.HI);
+    writeln ('Numero: ', a^.dato.numero, ' Nombre: ', a^.dato.nombre, ' Edad: ', a^.dato.edad);
+    if ((a <> nil) and (a^.HD <> nil))
+    then InformarDatosSociosOrdenCreciente (a^.HD);
   end;
-  ObtenerMaximo := valor_max;
-end;     
-     
-function  BuscarValor (v: vector; dimL, valor: integer): boolean;
+
+Begin
+ writeln;
+ writeln ('----- Socios en orden creciente por numero de socio ----->');
+ writeln;
+ InformarDatosSociosOrdenCreciente (a);
+ writeln;
+ writeln ('//////////////////////////////////////////////////////////');
+ writeln;
+end;
+
+procedure InformarSociosOrdenDecreciente (a:arbol);
+
+    procedure InformarDatosSociosOrdenDecreciente (a: arbol);
+      begin
+        if ((a <> nil) and (a^.HD <> nil)) then begin
+          InformarDatosSociosOrdenDecreciente (a^.HD);
+        end;
+        writeln ('Numero: ', a^.dato.numero, ' Nombre: ', a^.dato.nombre, ' Edad: ', a^.dato.edad);
+        if ((a <> nil) and (a^.HI <> nil))then begin 
+          InformarDatosSociosOrdenDecreciente (a^.HI); 
+        end;
+      end;
+
+Begin
+ writeln;
+ writeln ('----- Socios en orden decreciente por numero de socio ----->');
+ writeln;
+ InformarDatosSociosOrdenDecreciente (a);
+ writeln;
+ writeln ('//////////////////////////////////////////////////////////');
+ writeln;
+end;
+
+procedure InformarNumeroSocioConMasEdad (a: arbol);
+{ Informar el numero de socio con mayor edad. Debe invocar a un modulo recursivo que retorne dicho valor.  }
+
+     procedure actualizarMaximo(var maxValor,maxElem : integer; nuevoValor, nuevoElem : integer);
+	begin
+	  if (nuevoValor >= maxValor) then
+	  begin
+		maxValor := nuevoValor;
+		maxElem := nuevoElem;
+	  end;
+	end;
+	procedure NumeroMasEdad (a: arbol; var maxEdad: integer; var maxNum: integer);
+	begin
+	   if (a <> nil) then
+	   begin
+		  actualizarMaximo(maxEdad,maxNum,a^.dato.edad,a^.dato.numero);
+		  numeroMasEdad(a^.hi, maxEdad,maxNum);
+		  numeroMasEdad(a^.hd, maxEdad,maxNum);
+	   end; 
+	end;
+
+var maxEdad, maxNum: integer;
 begin
-  if( diml <> 0 ) and (valor <> v[diml])then begin 
-    writeln(valor);
-    writeln(v[diml]);
-    writeln(' ');
-    BuscarValor:= BuscarValor(v,diml-1,valor);
+  writeln;
+  writeln ('----- Informar Numero Socio Con Mas Edad ----->');
+  writeln;
+  maxEdad := -1;
+  NumeroMasEdad (a, maxEdad, maxNum);
+  if (maxEdad = -1) 
+  then writeln ('Arbol sin elementos')
+  else begin
+         writeln;
+         writeln ('Numero de socio con mas edad: ', maxNum);
+         writeln;
+       end;
+  writeln;
+  writeln ('//////////////////////////////////////////////////////////');
+  writeln;
+end;
+
+procedure AumentarEdadNumeroImpar (a: arbol);
+{Aumentar en 1 la edad de los socios con edad impar e informar la cantidad de socios que se les aumento la edad.}
+  
+  function AumentarEdad (a: arbol): integer;
+  var resto: integer;
+  begin
+     if (a = nil) 
+     then AumentarEdad:= 0
+     else begin
+            resto:= a^.dato.edad mod 2;
+            if (resto = 1) then a^.dato.edad:= a^.dato.edad + 1;
+            AumentarEdad:= resto + AumentarEdad (a^.HI) + AumentarEdad (a^.HD);
+          end;  
+  end;
+
+
+begin
+  writeln;
+  writeln ('----- Cantidad de socios con edad aumentada ----->');
+  writeln;
+  writeln ('Cantidad: ', AumentarEdad (a));
+  writeln;
+  writeln;
+  writeln ('//////////////////////////////////////////////////////////');
+  writeln;
+end;
+
+procedure InformarExistenciaNombreSocio (a:arbol);
+   
+   function busco_nombre (a:arbol; nombre: cadena15): boolean;
+     begin 
+       busco_nombre := false ;
+       if(a <> nil)then begin
+         if(a^.dato.nombre <> nombre)then begin 
+           busco_nombre := busco_nombre (a^.HI,nombre) or busco_nombre(a^.HD,nombre);
+         end
+         else begin 
+           busco_nombre := true;
+         end;
+       end
+       else begin 
+         busco_nombre := false;
+       end;
+     end;
+var 
+  nombre: cadena15;
+begin 
+  writeln('ingrese un nombre');
+  readln(nombre);
+  if(busco_nombre(a,nombre) = true ) then begin 
+    writeln('');
+    writeln(' el nombre ingresado existe en el arbol ');
   end
   else begin 
-    if(valor = v[diml])then begin 
-      BuscarValor := true;
-    end
-    else begin 
-      BuscarValor := false;
-    end;
+    writeln('');
+    writeln(' el nombre ingresado no existe en el arbol ');
   end;
-end; 
-procedure separo_digitos(valorleido:integer; num:integer);
-  begin 
-    if(valorleido <> 0)then begin 
-      num:= valorleido mod 10;
-      valorleido := valorleido div 10;
-      separo_digitos(valorleido,num);
-      writeln(num);
-    end;
-  end;
-procedure ImprimirDigitos (v: vector; dimL: integer);
-var 
-  valorleido: integer;
-  num: integer;
-begin    
-  if(diml <> 0)then begin 
-    valorleido := v[diml];
-    writeln(' ');
-    separo_digitos(valorleido,num);
-    ImprimirDigitos(v,diml-1);
-  end;      
-end; 
+end;
 
-var dimL, suma, maximo, valor, valor_max: integer; 
-    v: vector;
-    encontre: boolean;
+procedure InformarCantidadSocios (a:arbol; var cant:integer);
+  
+  function cant_socios (a:arbol): integer ;
+    begin 
+      if(a <> nil)then begin 
+        cant_socios := cant_socios(a^.HI) + cant_socios(a^.HD) + 1;
+      end
+      else begin 
+        cant_socios := 0;
+      end;
+    end;
+begin 
+  cant := cant_socios(a);
+  writeln('la cantidad de socios es de: ',cant);
+end;
+
+procedure InformarPromedioDeEdad (a:arbol; cant: integer; var prom: real); 
+  
+  function suma_edad (a:arbol):integer;
+    begin 
+      if(a <> nil)then begin 
+        suma_edad := suma_edad(a^.HI) + suma_edad(a^.HD) + a^.dato.edad;
+        writeln('la suma actual ',suma_edad);
+      end
+      else begin 
+        suma_edad := 0;
+      end;
+    end;
+var 
+  suma:integer;    
+begin 
+  suma:= suma_edad(a);
+  writeln('la suma de las edades es: ',suma);
+  prom := suma / cant; 
+end;
+
+var a: arbol; 
+cant : integer;
+prom : real;
 Begin
   randomize;
-  valor_max := 0; 
-  CargarVector (v, dimL);
-  
-  writeln;
-  
-  if (dimL = 0) then begin 
-     writeln ('--- Vector sin elementos ---');
-  end
-  else begin
-     ImprimirVector (v, dimL);
-     ImprimirVectorRecursivo (v, dimL);
-  end;
-  
-  writeln;
-  writeln; 
-                    
-  suma:= Sumar(v, dimL);
-  
-  writeln;
-  writeln;
-  
-  writeln('La suma de los valores del vector es ', suma); 
-  
-  writeln;
-  writeln;
-  
-  maximo:= ObtenerMaximo(v, dimL, valor_max );
-  
-  writeln;
-  writeln;
-  
-  writeln('El maximo del vector es ', maximo); 
-  
-  writeln;
-  writeln;
-  
-  write ('Ingrese un valor a buscar: ');
-  read (valor);
-  encontre:= BuscarValor(v, dimL, valor);
-  
-  writeln;
-  writeln;
-  writeln(encontre);
-  if (encontre) then begin 
-    writeln('El ', valor, ' esta en el vector');
-  end
-  else begin
-    writeln('El ', valor, ' no esta en el vector');
-  end;
-               
-  writeln;
-  writeln;
-  
-  ImprimirDigitos (v, dimL);
-end.
+  prom := 0;
+  GenerarArbol (a);
+  InformarSociosOrdenCreciente (a);
+  InformarSociosOrdenDecreciente (a); 
+  InformarNumeroSocioConMasEdad (a);
+  AumentarEdadNumeroImpar (a);
+  InformarExistenciaNombreSocio (a); 
+  InformarCantidadSocios (a,cant);
+  writeln(' ');
+  InformarPromedioDeEdad (a,cant,prom);
+  writeln('el promedio de las edades de los socios es: ',prom);
+End.
