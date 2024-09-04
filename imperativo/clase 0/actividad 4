@@ -1,0 +1,95 @@
+ACTIVIDAD 4: Crear un archivo ProgramaListasOrdenadas.pas
+a) Implemente un módulo CargarListaOrdenada que cree una lista de
+enteros y le agregue valores aleatorios entre el 100 y 150, hasta que se
+genere el 120. Los valores dentro de la lista deben quedar ordenados
+de menor a mayor.
+b) Reutilice el módulo ImprimirLista que reciba una lista generada en a) e
+imprima todos los valores de la lista en el mismo orden que están
+almacenados.
+c) Implemente un módulo BuscarElementoOrdenado que reciba la lista
+generada en a) y un valor entero y retorne true si el valor se encuentra
+en la lista y false en caso contrario.
+d) Invocar desde el programa principal a los módulos implementados
+para crear una lista ordenada, mostrar todos sus elementos y
+determinar si un valor leído por teclado se encuentra o no en la lista.
+
+
+program actividad_3;
+type 
+  lista =^ nodo;
+  nodo = record
+    dato: integer;
+    sig: lista;
+  end;
+procedure agregarordenado(var l:lista; valor:integer);
+  var 
+    aux:lista;
+    ant,act:lista;
+  begin 
+    new(aux);
+    aux^.dato:= valor;
+    ant:= l;
+    act:= l;
+    while (act <> nil) and (act^.dato > aux^.dato) do begin 
+      ant:=act;
+      act:=ant;
+    end;
+    if(ant = act)then begin
+      l:= aux;
+    end
+    else begin
+      ant^.sig := aux;
+    end;
+    aux^.sig := act;
+  end;
+procedure cargarlista(var l:lista; min,max:integer);
+  var 
+    valor: integer;
+  begin 
+    valor:= min + random (max - min + 1);
+    while (valor <> 120)do begin 
+      agregarordenado(l,valor);
+      valor:= min + random (max - min + 1);
+    end;
+  end;
+procedure imprimirlista(l:lista);
+  begin
+    writeln('los valores de la lista son: ');
+    while (l <> nil ) do begin 
+      writeln(' el valor es: ',l^.dato);
+      l:=l^.sig;
+    end;
+  end;
+procedure buscar_elemento(l:lista; valor:integer; var esta: boolean);
+  begin 
+    esta:= false;
+    while (l <> nil) do begin 
+      if(l^.dato <= valor)then begin
+        if(l^.dato = valor)then begin 
+          esta:= true;
+          l:= nil; 
+        end
+        else begin 
+          l := l^.sig;
+        end;
+      end
+      else begin 
+        l:= nil;
+      end;
+    end;
+  end;
+var 
+  l: lista;
+  min,max,valor: integer;
+  esta: boolean;
+begin 
+  l:=nil;
+  min:= 100;
+  max:=150;
+  cargarlista(l,min,max);
+  imprimirlista(l);
+  writeln('ingrese un valor entre el 100 y el 150');
+  readln(valor);
+  buscar_elemento(l,valor,esta);
+  writeln('el valor se encuenta en la lista? ',esta );
+end.
