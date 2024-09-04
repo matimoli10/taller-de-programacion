@@ -36,9 +36,9 @@ procedure cargarvector(var v:vector; var diml:integer);
     o:oficina;
   begin 
     leerdatos(o);
-    while (diml <> 300) and (o.cod_identificacion <> -1)do begin 
-      v[diml]:= o;
+    while (diml <> dimf) and (o.cod_identificacion <> -1)do begin 
       diml:= diml + 1;
+      v[diml]:= o;
       leerdatos(o);
     end;
   end; 
@@ -60,8 +60,8 @@ procedure seleccion (var v:vector; diml: integer);
       v[i] := actual;
     end;
   end;
-  
-{procedure insercion(var v:vector; diml:integer );
+{  
+procedure insercion(var v:vector; diml:integer );
   var i,j: integer; 
     actual: oficina;
   begin 
@@ -88,9 +88,9 @@ var
   v: vector;
   diml: integer;
 begin  
-  diml:= 1;
+  diml:= 0;
   cargarVector(v,diml);
- {insercion(v,diml);}
+  {insercion(v,diml);}
   seleccion(v,diml);
   recorrovector (v,diml);
 end.
