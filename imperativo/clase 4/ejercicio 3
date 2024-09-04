@@ -1,0 +1,172 @@
+3. Implementar un programa modularizado para una librería. Implementar módulos para:
+a. Almacenar los productos vendidos en una estructura eficiente para la búsqueda por
+código de producto. De cada producto deben quedar almacenados su código, la
+cantidad total de unidades vendidas y el monto total. De cada venta se lee código de
+venta, código del producto vendido, cantidad de unidades vendidas y precio unitario. El
+ingreso de las ventas finaliza cuando se lee el código de venta -1.
+b. Imprimir el contenido del árbol ordenado por código de producto.
+c. Retornar el código de producto con mayor cantidad de unidades vendidas.
+d. Retornar la cantidad de códigos que existen en el árbol que son menores que un valor
+que se recibe como parámetro.
+e. Retornar el monto total entre todos los códigos de productos comprendidos entre dos
+valores recibidos (sin incluir) como parámetros.
+
+
+program ejercicio_3;
+
+type 
+  producto = record
+    codigo : integer;
+    cant_vendidas : integer;
+    monto_total: real;
+  end;
+  venta = record
+    cod_venta: integer;
+    cod_producto: integer;
+    cant_unidades: integer;
+    precio_unitario: real;
+  end;
+  arbol =^nodo;
+    nodo = record
+      dato: producto;
+      hi: arbol;
+      hd: arbol;
+    end;
+    
+procedure ingreso_ventas(var v:venta);
+  begin 
+    writeln('ingres el codigo de venta ');
+    readln(v.cod_venta);
+    if(v.cod_venta <> -1)then begin 
+      writeln('ingres el codigo de producto ');
+      readln(v.cod_producto);
+      writeln('ingrese la cantidad de unidades  ');
+      readln(v.cant_unidades);
+      writeln('ingres el precio ');
+      readln(v.precio_unitario);
+    end;
+  end;
+procedure cargar_info(var a: arbol; v: venta);
+  begin 
+    if(a <> nil)then begin 
+      if(v.cod_venta = a^.dato.codigo)then begin 
+        a^.dato.cant_vendidas := a^.dato.cant_vendidas + v.cant_unidades;
+        a^.dato.monto_total := a^.dato.monto_total + v.precio_unitario; 
+      end
+      else begin 
+        if(v.cod_venta < a^.dato.codigo)then begin
+          cargar_info(a^.hi,v);
+        end
+        else begin 
+          if(v.cod_venta > a^.dato.codigo)then begin 
+            cargar_info(a^.hd,v);
+          end;
+        end;
+      end;
+    end
+    else begin 
+      new(a);
+      a^.dato.codigo:= v.cod_venta;
+      a^.dato.cant_vendidas := v.cant_unidades;
+      a^.dato.monto_total := v.precio_unitario;
+      a^.hi:= nil;
+      a^.hd:= nil; 
+    end;
+  end;
+procedure cargar_arbol(var a:arbol);
+  var 
+    v:venta;
+  begin 
+    ingreso_ventas(v);
+    while (v.cod_venta <> -1)do begin 
+      cargar_info(a,v);
+      ingreso_ventas(v);      
+    end;
+  end;
+procedure imprimo_ordenado(a:arbol);
+  begin 
+    if(a <> nil)then begin 
+      imprimo_ordenado(a^.hi);
+      writeln('');
+      writeln('el contenido es: ');
+      writeln(a^.dato.codigo);
+      writeln(a^.dato.cant_vendidas);
+      writeln(a^.dato.monto_total);
+      imprimo_ordenado(a^.hd);
+    end;
+  end;
+procedure busco_mas_vendidas (a: arbol);
+   procedure mayor(a: arbol;var cant: integer; var cod:integer);
+    begin 
+      if(a <> nil)then begin 
+        if(a^.dato.cant_vendidas > cant)then begin 
+          cant := a^.dato.cant_vendidas;
+          cod := a^.dato.codigo;
+        end;
+        mayor(a^.hi,cant,cod);
+        mayor(a^.hd,cant,cod);
+      end;
+    end;
+    
+  var 
+    cod: integer;
+    cant: integer;
+  begin 
+    cant := 0;
+    mayor(a,cant,cod);
+    writeln('el codigo con mas unidades vendidas es:',cod,' con una cantidad de: ',cant);    
+  end;
+function cant_menores(a: arbol; valor: integer): integer;
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.codigo < valor)then begin 
+        cant_menores := cant_menores(a^.hi,valor) + cant_menores(a^.hd,valor) + 1;
+      end
+      else begin
+        cant_menores := cant_menores(a^.hi,valor);
+      end;
+    end
+    else begin 
+      cant_menores := 0;
+    end;
+  end; 
+function total (a: arbol;num1, num2: integer): real;
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.codigo > num1) and (a^.dato.codigo < num2)then begin 
+        total:= total(a^.hi,num1,num2) + total(a^.hd,num1,num2) + a^.dato.monto_total ; 
+      end
+      else begin 
+        if(a^.dato.codigo <= num1)then begin 
+          total(a^.hd,num1,num2);
+        end
+        else begin 
+          if(a^.dato.codigo >= num2)then begin 
+            total(a^.hi,num1,num2);
+          end;
+        end;
+      end;
+    end
+    else begin 
+      total := 0;
+    end;
+  end; 
+
+
+var 
+  a: arbol;
+  valor: integer;
+  num1, num2: integer;
+begin 
+  cargar_arbol(a);
+  imprimo_ordenado(a);
+  busco_mas_vendidas(a);
+  writeln('ingrese un valor ');
+  readln(valor);
+  writeln('la cantidad de codigos de producto que son menores a el valor elegido ',valor,' es: ',cant_menores(a,valor));
+  writeln('elija un codigo');
+  readln(num1);
+  writeln('elija un codigo mayor al ya ',num1);
+  readln(num2);
+  writeln('el monto total de todos los codigos que se encuentran entre: ',num1,' y ',num2,' son: ',total(a,num1,num2));
+end.
