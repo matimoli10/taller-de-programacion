@@ -14,7 +14,7 @@ para crear una lista ordenada, mostrar todos sus elementos y
 determinar si un valor leído por teclado se encuentra o no en la lista.
 
 
-program actividad_3;
+program actividad_4;
 type 
   lista =^ nodo;
   nodo = record
@@ -30,9 +30,9 @@ procedure agregarordenado(var l:lista; valor:integer);
     aux^.dato:= valor;
     ant:= l;
     act:= l;
-    while (act <> nil) and (act^.dato > aux^.dato) do begin 
+    while (act <> nil) and (act^.dato < aux^.dato) do begin 
       ant:=act;
-      act:=ant;
+      act:=act^.sig;
     end;
     if(ant = act)then begin
       l:= aux;
@@ -64,6 +64,7 @@ procedure buscar_elemento(l:lista; valor:integer; var esta: boolean);
   begin 
     esta:= false;
     while (l <> nil) do begin 
+      writeln(l^.dato);
       if(l^.dato <= valor)then begin
         if(l^.dato = valor)then begin 
           esta:= true;
@@ -83,7 +84,8 @@ var
   min,max,valor: integer;
   esta: boolean;
 begin 
-  l:=nil;
+  randomize;
+  l:= nil;
   min:= 100;
   max:=150;
   cargarlista(l,min,max);
