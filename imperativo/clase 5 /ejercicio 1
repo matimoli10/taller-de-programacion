@@ -1,0 +1,157 @@
+1. El administrador de un edificio de oficinas tiene la información del pago de las expensas
+de dichas oficinas. Implementar un programa con:
+a) Un módulo que retorne un vector, sin orden, con a lo sumo las 300 oficinas que
+administra. Se deben cargar, para cada oficina, el código de identificación, DNI del
+propietario y valor de la expensa. La lectura finaliza cuando llega el código de
+identificación 0.
+b) Un módulo que reciba el vector retornado en a) y retorne dicho vector ordenado por
+código de identificación de la oficina. Ordenar el vector aplicando uno de los métodos
+vistos en la cursada.
+c) Un módulo que realice una búsqueda dicotómica. Este módulo debe recibir el vector
+generado en b) y un código de identificación de oficina. En el caso de encontrarlo, debe
+retornar la posición del vector donde se encuentra y en caso contrario debe retornar 0.
+Luego el programa debe informar el DNI del propietario o un cartel indicando que no
+se encontró la oficina.
+d) Un módulo recursivo que retorne el monto total de las expensas.
+
+
+
+program ejercicio_1;
+const
+  dimf = 300;
+type 
+  rango = 1..dimf;
+  oficina = record 
+    codigo: integer;
+    dni : integer;
+    valor : real;
+  end;
+  
+  vector_oficinas = array [rango] of oficina;
+  
+procedure ingreso_datos(var o:oficina);
+  begin 
+    writeln('ingrese el codigo de oficina');
+    readln(o.codigo);
+    if(o.codigo <> 0)then begin 
+      writeln('ingrese el dni del cliente ');
+      readln(o.dni);
+      writeln('ingrese el valor de la expensa');
+      readln(o.valor);
+    end;
+  end;
+procedure cargar_vector (var vo:vector_oficinas;var diml:integer);
+  var 
+    o:oficina;
+  begin
+    ingreso_datos(o);
+    while (o.codigo <> 0) and (diml < dimf)do begin 
+      diml:= diml + 1;
+      vo[diml]:= o;
+      ingreso_datos(o);
+    end;
+  end;
+procedure insercion (var vo: vector_oficinas; diml: integer);
+  var 
+    i,j: integer;
+    actual: oficina;
+  begin 
+    for i := 2 to diml do begin 
+      actual := vo[i];
+      j:= i - 1;
+      while (j <> 0)and (vo[j].codigo > actual.codigo)do begin 
+        vo[j + 1] := vo[j];
+        j:= j - 1;
+      end;
+      vo[j + 1] := actual
+    end;
+  end;
+procedure busqueda_dicotomica (vo: vector_oficinas; diml: integer; cod: integer; var pos: integer);
+  var 
+    mitad: integer;
+    inicio: integer;
+    fin: integer;
+  begin 
+    inicio := 1;
+    fin := diml;
+    if(vo[inicio].codigo <> cod)and(vo[fin].codigo <> cod)then begin
+      mitad := (inicio + fin) div 2;
+      writeln('valor de mitad 1 ',mitad);
+      while (mitad <> inicio) and (mitad <> fin)do begin 
+        if(vo[mitad].codigo = cod)then begin 
+          pos := mitad;
+          mitad:= inicio;
+          writeln('encontroo');
+        end
+        else begin 
+          if(vo[mitad].codigo > cod)then begin 
+            fin:= mitad;
+            mitad := (inicio + fin) div 2;
+            writeln('valor de mitad 2 ',mitad);
+          end
+          else begin     
+            inicio := mitad;
+            mitad := (inicio + fin) div 2;
+            writeln('valor de mitad 3 ',mitad);
+          end;
+        end;
+      end;
+    end
+    else begin 
+      if(vo[inicio].codigo = cod)then begin
+        pos := inicio;
+      end
+      else begin 
+        pos := fin;
+      end;
+    end;
+  end;
+procedure total_expensas(vo:vector_oficinas; diml: integer; var total: real);
+  begin 
+    if(diml <> 0)then begin 
+      writeln(total);
+      total := total + vo[diml].valor;
+      total_expensas (vo,diml-1,total);
+    end;
+  end;
+
+procedure recorrer_vector (vo: vector_oficinas; diml: integer );
+  var 
+    i :integer;
+  begin 
+    for i := 1 to diml do begin 
+      writeln('imprimo posicion ',i,'  ',vo[i].codigo);
+    end;
+  end;
+  
+var 
+  vo : vector_oficinas;
+  diml: integer;
+  cod,pos: integer;
+  total: real;
+begin 
+  diml := 0;
+  pos := 0;
+  total := 0;
+  cargar_vector(vo,diml);
+  if(diml <> 0)then begin
+    recorrer_vector(vo,diml);
+    insercion(vo,diml);
+    recorrer_vector(vo,diml);
+    writeln('');
+    writeln('ingrese el codigo que desea buscar');
+    readln(cod); 
+    busqueda_dicotomica(vo,diml,cod,pos);
+    writeln('');
+    if(pos <> 0)then begin 
+      writeln('el codigo ',cod,' se encuentra en la posicion: ',pos);
+    end
+    else begin 
+      writeln('el codigo ingresado no se encuentra en el vector ');
+    end;
+    writeln('');
+    total_expensas(vo,diml,total);
+    writeln('el total de expensas es: ',total);
+    writeln('');
+  end;
+end.
