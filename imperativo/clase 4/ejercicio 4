@@ -182,8 +182,8 @@ function prestamos_socio(a: arbol; num: integer): integer;
         prestamos_socio := prestamos_socio(a^.hi,num) + prestamos_socio(a^.hd,num) + 1 ;
       end
       else begin 
-         prestamos_socio(a^.hi,num);
-         prestamos_socio(a^.hd,num);
+         prestamos_socio := prestamos_socio(a^.hi,num);
+         prestamos_socio := prestamos_socio(a^.hd,num);
       end;
     end
     else begin 
