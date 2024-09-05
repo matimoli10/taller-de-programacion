@@ -76,23 +76,19 @@ procedure busqueda_dicotomica (vo: vector_oficinas; diml: integer; cod: integer;
     fin := diml;
     if(vo[inicio].codigo <> cod)and(vo[fin].codigo <> cod)then begin
       mitad := (inicio + fin) div 2;
-      writeln('valor de mitad 1 ',mitad);
       while (mitad <> inicio) and (mitad <> fin)do begin 
         if(vo[mitad].codigo = cod)then begin 
           pos := mitad;
           mitad:= inicio;
-          writeln('encontroo');
         end
         else begin 
           if(vo[mitad].codigo > cod)then begin 
             fin:= mitad;
             mitad := (inicio + fin) div 2;
-            writeln('valor de mitad 2 ',mitad);
           end
           else begin     
             inicio := mitad;
             mitad := (inicio + fin) div 2;
-            writeln('valor de mitad 3 ',mitad);
           end;
         end;
       end;
@@ -109,7 +105,9 @@ procedure busqueda_dicotomica (vo: vector_oficinas; diml: integer; cod: integer;
 procedure total_expensas(vo:vector_oficinas; diml: integer; var total: real);
   begin 
     if(diml <> 0)then begin 
-      writeln(total);
+      {writeln(total);
+      writeln(vo[diml].valor);
+      writeln('');}
       total := total + vo[diml].valor;
       total_expensas (vo,diml-1,total);
     end;
@@ -135,8 +133,10 @@ begin
   total := 0;
   cargar_vector(vo,diml);
   if(diml <> 0)then begin
+    writeln('');
     recorrer_vector(vo,diml);
     insercion(vo,diml);
+    writeln('');
     recorrer_vector(vo,diml);
     writeln('');
     writeln('ingrese el codigo que desea buscar');
