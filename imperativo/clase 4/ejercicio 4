@@ -1,0 +1,386 @@
+4. Una biblioteca nos ha encargado procesar la información de los préstamos realizados
+durante el año 2021. De cada préstamo se conoce el ISBN del libro, el número de socio, día
+y mes del préstamo y cantidad de días prestados. Implementar un programa con:
+a. Un módulo que lea préstamos y retorne 2 estructuras de datos con la información de
+los préstamos. La lectura de los préstamos finaliza con ISBN 0. Las estructuras deben
+ser eficientes para buscar por ISBN.
+i. En una estructura cada préstamo debe estar en un nodo. Los ISBN repetidos
+insertarlos a la derecha.
+ii. En otra estructura, cada nodo debe contener todos los préstamos realizados al ISBN.
+(prestar atención sobre los datos que se almacenan).
+b. Un módulo recursivo que reciba la estructura generada en i. y retorne el ISBN más
+grande.
+c. Un módulo recursivo que reciba la estructura generada en ii. y retorne el ISBN más
+pequeño.
+d. Un módulo recursivo que reciba la estructura generada en i. y un número de socio. El
+módulo debe retornar la cantidad de préstamos realizados a dicho socio.
+e. Un módulo recursivo que reciba la estructura generada en ii. y un número de socio. El
+módulo debe retornar la cantidad de préstamos realizados a dicho socio.
+f. Un módulo que reciba la estructura generada en i. y retorne una nueva estructura
+ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
+que se prestó.
+g. Un módulo que reciba la estructura generada en ii. y retorne una nueva estructura
+ordenada ISBN, donde cada ISBN aparezca una vez junto a la cantidad total de veces
+que se prestó.
+h. Un módulo recursivo que reciba la estructura generada en g. y muestre su contenido.
+i. Un módulo recursivo que reciba la estructura generada en i. y dos valores de ISBN. El
+módulo debe retornar la cantidad total de préstamos realizados a los ISBN
+comprendidos entre los dos valores recibidos (incluidos).
+j. Un módulo recursivo que reciba la estructura generada en ii. y dos valores de ISBN. El
+módulo debe retornar la cantidad total de préstamos realizados a los ISBN
+comprendidos entre los dos valores recibidos (incluidos).
+
+
+
+program ejercicio_4;
+
+type 
+  prestamos =  record
+    isbn: integer;
+    num_socio: integer;
+    dia: integer;
+    mes: integer;
+    cant_dias: integer
+  end;
+  
+  arbol =^nodo;
+    nodo = record
+      dato: prestamos;
+      hi: arbol;
+      hd: arbol;
+    end;
+  
+  lista =^nodolista;
+    nodolista = record 
+      dat: prestamos;
+      sig: lista;
+    end; 
+  
+  arbol2 = ^nodo2;
+    nodo2 = record
+      dato: lista;
+      hi: arbol2;
+      hd: arbol2;
+    end;
+    
+  prestamo = record
+    isbn : integer;
+    total_prestamos: integer;
+  end;
+  
+  arbol3 =^nodo3;
+    nodo3 = record
+      dato: prestamo;
+      hi: arbol3;
+      hd: arbol3;
+    end;
+  
+  arbol4 =^nodo4;
+    nodo4 = record
+      dato: prestamo;
+      hi: arbol4;
+      hd: arbol4;
+    end;
+    
+procedure cargar_prestamos (var p: prestamos);
+  begin 
+    writeln('ingrese el codigo isbn');
+    readln(p.isbn);
+    if(p.isbn <> 0 )then begin
+      writeln('ingrese el numero de socio ');
+      readln(p.num_socio);
+      writeln('ingrese el dia');
+      readln(p.dia);
+      writeln('ingrese el mes');
+      readln(p.mes);
+      writeln('ingrese la cantidad de dias que se presto');
+      readln(p.cant_dias);
+    end;
+  end;
+procedure cargo_datos (var a: arbol;p: prestamos);
+  begin 
+    if(a = nil)then begin 
+      new(a);
+      a^.dato := p;
+      a^.hi := nil;
+      a^.hd := nil;
+    end
+    else begin 
+      if(a^.dato.isbn > p.isbn)then begin 
+        cargo_datos(a^.hi,p);
+      end
+      else begin 
+        cargo_datos(a^.hd,p);
+      end;
+    end;
+  end;
+procedure agregaradelante(var l: lista; p :prestamos);
+  var
+    aux:lista;
+  begin 
+    new(aux);
+    aux^.dat := p;
+    aux^.sig := l;
+    l := aux; 
+  end;
+procedure cargo_info (var a2: arbol2; p:prestamos);
+  begin 
+    if(a2 = nil)then begin
+      new(a2);
+      a2^.dato := nil;
+      agregaradelante(a2^.dato,p);
+      a2^.hi := nil;
+      a2^.hd := nil;
+    end
+    else begin 
+      if(a2^.dato^.dat.isbn = p.isbn)then begin 
+        agregaradelante(a2^.dato,p);
+      end
+      else begin 
+        if(a2^.dato^.dat.isbn > p.isbn)then begin 
+          cargo_info (a2^.hi,p);
+        end
+        else begin 
+          cargo_info (a2^.hd,p);
+        end;
+      end;
+    end;
+  end;
+procedure cargar_arboles(var a: arbol;var a2: arbol2);
+  var 
+    p:prestamos;
+  begin 
+    cargar_prestamos(p);
+    while(p.isbn <> 0)do begin 
+      cargo_datos(a,p);
+      cargo_info(a2,p);
+      cargar_prestamos(p);
+    end;
+  end;
+procedure mas_grande(var a: arbol; var max:integer);
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.isbn > max)then begin 
+        max:= a^.dato.isbn;
+      end;
+      mas_grande(a^.hd,max);
+    end;
+  end;
+procedure mas_peque (var a2 : arbol2; var min:integer);
+  begin 
+    if(a2 <> nil )then begin 
+      if(a2^.dato^.dat.isbn < min)then begin 
+        min :=  a2^.dato^.dat.isbn;
+      end;
+      mas_peque(a2^.hi,min);
+    end;
+  end;
+function prestamos_socio(a: arbol; num: integer): integer;
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.num_socio = num)then begin 
+        prestamos_socio := prestamos_socio(a^.hi,num) + prestamos_socio(a^.hd,num) + 1 ;
+      end
+      else begin 
+         prestamos_socio(a^.hi,num);
+         prestamos_socio(a^.hd,num);
+      end;
+    end
+    else begin 
+      prestamos_socio := 0;
+    end;
+  end;
+function prestamos_socio_ii(a2: arbol2; num: integer):integer;
+  begin 
+    if(a2 <> nil)then begin 
+      if(a2^.dato^.dat.isbn = num)then begin 
+        prestamos_socio_ii := prestamos_socio_ii(a2^.hi,num) + prestamos_socio_ii(a2^.hd,num) + 1;
+      end
+      else begin 
+        prestamos_socio_ii := prestamos_socio_ii(a2^.hi,num);
+        prestamos_socio_ii := prestamos_socio_ii(a2^.hd,num);
+      end;
+    end
+    else begin 
+      prestamos_socio_ii := 0;
+    end;
+  end;
+procedure cargo_arbol3(a:arbol;var a3: arbol3);
+
+  procedure el_arbol3(var a3: arbol3; p: prestamo);
+    begin 
+      if(a3 = nil)then begin 
+        new(a3);
+        a3^.dato := p;
+        a3^.hi := nil;
+        a3^.hd := nil;
+      end
+      else begin 
+        if(a3^.dato.isbn = p.isbn)then begin
+          a3^.dato.total_prestamos := a3^.dato.total_prestamos + 1;
+        end
+        else begin 
+          if(a3^.dato.isbn > p.isbn)then begin 
+            el_arbol3(a3^.hi,p);
+          end
+          else begin 
+            el_arbol3(a3^.hd,p);
+          end;
+        end;
+      end;
+    end;
+    
+  var
+    p:prestamo;
+  begin 
+    if(a <> nil)then begin
+      p.isbn := a^.dato.isbn;
+      p.total_prestamos := 1;
+      el_arbol3(a3,p);
+      cargo_arbol3(a^.hi,a3);
+      cargo_arbol3(a^.hd,a3);      
+    end;
+  end;
+
+procedure cargar_arbol4 (a2: arbol2; var a4: arbol4);
+   
+   procedure recorrerlista(l:lista;var cant:integer);
+     begin 
+       while (l <> nil)do begin 
+         cant:= cant + 1;
+         l:=l^.sig;
+       end;
+     end;
+  
+   procedure el_arbol4 (var a4: arbol4; p:prestamo);
+     begin 
+       if(a4 = nil)then begin
+        new(a4);
+        a4^.dato := p;
+        a4^.hi := nil;
+        a4^.hd := nil;
+       end
+       else begin 
+         if(a4^.dato.isbn > p.isbn)then begin 
+           el_arbol4(a4^.hi,p);
+         end
+         else begin 
+           el_arbol4(a4^.hd,p);
+         end;
+       end;
+     end;
+  var 
+    p:prestamo;
+    cant: integer;
+  begin 
+    if(a2 <> nil)then begin 
+      cant := 0;
+      p.isbn := a2^.dato^.dat.isbn;
+      recorrerlista(a2^.dato,cant);
+      p.total_prestamos := cant;
+      el_arbol4(a4,p);
+      cargar_arbol4(a2^.hi,a4);
+      cargar_arbol4(a2^.hd,a4);
+    end;
+  end;
+procedure imprimir_arbol4 (a4: arbol4);
+  begin 
+    if(a4 <> nil)then begin 
+      writeln('el codigo: ',a4^.dato.isbn);
+      writeln('el total de prestamos que hubo con ese codigo es: ',a4^.dato.total_prestamos);
+      writeln('');
+      imprimir_arbol4(a4^.hi);
+      imprimir_arbol4(a4^.hd);
+    end;
+  end;
+function entre_valores(a: arbol; num1,num2:integer): integer;
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.isbn >= num1)and (a^.dato.isbn <= num2)then begin 
+        entre_valores := entre_valores(a^.hi,num1,num2)+ entre_valores(a^.hd,num1,num2) + 1;
+      end
+      else begin 
+        if(a^.dato.isbn < num1)then begin 
+          entre_valores := entre_valores(a^.hd,num1,num2);
+        end
+        else begin 
+          if(a^.dato.isbn > num2)then begin 
+            entre_valores := entre_valores(a^.hi,num1,num2);
+          end;
+        end;
+      end;
+    end
+    else begin 
+      entre_valores := 0;
+    end;
+  end;
+function entre_valores_ii (a2: arbol2; num1,num2:integer): integer;
+
+  function cant_prestamos (l:lista): integer;
+    var
+      cant: integer;
+    begin 
+      cant := 0;
+      while (l <> nil)do begin 
+        cant := cant + 1;
+        l := l^.sig;
+      end;
+      cant_prestamos := cant;
+    end;
+
+  begin 
+    if(a2 <> nil)then begin 
+      if(a2^.dato^.dat.isbn >= num1)and(a2^.dato^.dat.isbn <= num2)then begin
+        entre_valores_ii := entre_valores_ii(a2^.hi,num1,num2) + entre_valores_ii (a2^.hd,num1,num2) +  cant_prestamos(a2^.dato);
+      end
+      else begin  
+        if(a2^.dato^.dat.isbn < num1)then begin 
+          entre_valores_ii := entre_valores_ii(a2^.hd,num1,num2);
+        end
+        else begin 
+          if(a2^.dato^.dat.isbn > num2)then begin 
+            entre_valores_ii := entre_valores_ii(a2^.hi,num1,num2);
+          end;
+        end;
+      end;
+    end
+    else begin
+      entre_valores_ii := 0;
+    end;
+  end;
+var 
+  a: arbol;
+  a2: arbol2;
+  a3: arbol3;
+  a4: arbol4;
+  num,num1,num2:integer;
+  max,min :integer;
+begin 
+  a:= nil;
+  a2:= nil;
+  a3:= nil;
+  a4:= nil;
+  max := 0;
+  min := 9999;
+  cargar_arboles(a,a2);
+  mas_grande(a,max);
+  writeln('el isbn mas grande del arbol es: ',max);
+  mas_peque(a2,min);
+  writeln('el isbn mas chico del arbol 2 es: ',min);
+  writeln('');
+  writeln('ingrese un numero de socio');
+  readln(num);
+  writeln('la cantidad de prestamos del socio: ',num,' en el arbol es: ',prestamos_socio(a,num));
+  writeln('la cantidad de prestamos del socio: ',num,' en el arbol 2 es: ',prestamos_socio_ii(a2,num));
+  cargo_arbol3(a,a3);
+  cargar_arbol4(a2,a4);
+  writeln('');
+  imprimir_arbol4(a4);
+  writeln('');
+  writeln('ingrese un isbn ');
+  readln(num1);
+  writeln('ingrese un isbn mayor a: ',num1);
+  readln(num2);
+  writeln('en el arbol el total de prestamos realizados a los isbn que se encuentras entre los dos elegidos (incluidos) son: ',entre_valores(a,num1,num2));
+  writeln('en el arbol 2 el total de prestamos realizados a los isbn que se encuentras entre los dos elegidos (incluidos) son: ',entre_valores_ii(a2,num1,num2));
+end.
