@@ -1,0 +1,196 @@
+3. Un supermercado requiere el procesamiento de sus productos. De cada producto se
+conoce código, rubro (1..10), stock y precio unitario. Se pide:
+a) Generar una estructura adecuada que permita agrupar los productos por rubro. A su
+vez, para cada rubro, se requiere que la búsqueda de un producto por código sea lo
+más eficiente posible. El ingreso finaliza con el código de producto igual a 0.
+b) Implementar un módulo que reciba la estructura generada en a), un rubro y un código
+de producto y retorne si dicho código existe o no para ese rubro.
+c) Implementar un módulo que reciba la estructura generada en a), y retorne, para cada
+rubro, el código y stock del producto con mayor código.
+d) Implementar un módulo que reciba la estructura generada en a), dos códigos y
+retorne, para cada rubro, la cantidad de productos con códigos entre los dos valores
+ingresados.
+
+
+
+program ejercicio_3;
+const 
+  dimf = 10;
+type 
+  rango = 1..dimf;
+  producto = record 
+    codigo: integer;
+    rubro: rango;
+    stock: integer;
+    precio_unitario: real;
+  end;
+  
+  arbol = ^nodo;
+    nodo = record 
+      dato: producto;
+      hi: arbol;
+      hd: arbol;
+    end;
+  
+  vector = array [rango] of arbol;
+  
+  mayor = record 
+    codigo: integer;
+    stock: integer;
+  end;
+  
+  vector2 = array [rango] of mayor;
+  
+  vector_cantidad = array [rango] of integer;
+
+procedure cargar_datos (var p:producto);
+  begin 
+    writeln('ingrese el codigo de producto');
+    readln(p.codigo);
+    if(p.codigo <> 0)then begin 
+      writeln('ingrese el rubro');
+      readln(p.rubro);
+      writeln('ingrese el stock');
+      readln(p.stock);
+      writeln('ingrese el precio');
+      readln(p.precio_unitario);
+    end;
+  end;
+procedure cargar_arbol (var a:arbol; p:producto);
+  begin 
+    if (a = nil)then begin 
+      new(a);
+      a^.dato := p;
+      a^.hi := nil;
+      a^.hd := nil;
+    end
+    else begin 
+      if (a^.dato.codigo > p.codigo)then begin
+        cargar_arbol(a^.hi,p);
+      end
+      else begin 
+        cargar_arbol(a^.hd,p);
+      end;
+    end;
+  end;
+procedure inicializo_vector(var v: vector);
+  var
+    i:rango;
+  begin 
+    for i := 1 to dimf do begin 
+      v[i] := nil;
+    end;
+  end;
+procedure cargar_vector (var v:vector);
+  var
+    p:producto;
+  begin 
+    cargar_datos(p);
+    while(p.codigo <> 0)do begin 
+      cargar_arbol(v[p.rubro],p);
+      cargar_datos(p);
+    end;
+  end;
+function cumple (a: arbol; cod: integer): boolean;
+  begin 
+    if(a <> nil)then begin
+      if(cod = a^.dato.codigo)then begin 
+        cumple := true;
+      end
+      else begin 
+        cumple := cumple(a^.hi,cod);
+        cumple := cumple(a^.hd,cod);
+      end;
+    end;
+  end;
+procedure buscar (v: vector; var rub: rango; var cod: integer);
+  begin 
+    writeln(' ');
+    writeln('ingrese el codigo que desea buscar');
+    readln(cod);
+    writeln('ingrese en el rubro que desea buscar el codigo');
+    readln(rub);
+    writeln(' ');
+    if(cumple (v[rub],cod))then begin 
+      writeln('el codigo ingresado existe');
+    end
+    else begin 
+      writeln('el codigo ingresado no existe');
+    end;
+    writeln(' ');
+  end;
+procedure busco_mayor(a: arbol;var m: mayor);
+  begin
+    if (a <> nil)then begin 
+      if(a^.dato.codigo > m.codigo)then begin 
+        m.stock := a^.dato.stock;
+        m.codigo := a^.dato.codigo;
+      end
+      else begin 
+        busco_mayor(a^.hd,m);
+      end;
+    end;
+  end;
+procedure mayor_code (v: vector; var v2: vector2);
+  var 
+    i: rango;
+    m: mayor;
+  begin 
+    for i := 1 to dimf do begin 
+      m.codigo := 0;
+      busco_mayor(v[i],m);
+      v2[i] := m;
+    end;
+  end; 	
+procedure codigos (var cod1: integer; var cod2: integer);
+  begin 
+    writeln(' ');
+    writeln('ingrese un codigo');
+    readln(cod1);
+    writeln('ingrese un codigo mayor a ',cod1);
+    readln(cod2);
+  end;
+function medios (a: arbol; cod1: integer; cod2: integer): integer;
+  begin 
+    if (a <> nil)then begin 
+      if(a^.dato.codigo > cod1)and(a^.dato.codigo < cod2)then begin
+        medios := medios(a^.hi,cod1,cod2) + medios(a^.hd,cod1,cod2) + 1;
+      end
+      else begin 
+        if(a^.dato.codigo <= cod1)then begin
+          medios := medios(a^.hd,cod1,cod2);
+        end
+        else begin 
+          if(a^.dato.codigo >= cod2)then begin 
+            medios := medios(a^.hi,cod1,cod2);
+          end;
+        end;
+      end;
+    end
+    else begin
+      medios := 0;
+    end;
+  end;
+procedure entre_codigos (v : vector; cod1: integer; cod2: integer; var vc :vector_cantidad);
+  var 
+    i: integer;
+  begin 
+    for i := 1 to dimf do begin 
+      vc[i] := medios (v[i],cod1,cod2);
+      writeln('la cantidad de codigos que estan entre medio de ',cod1,' y ',cod2,' en el rubro ',i,' es: ',vc[i]);
+    end;
+  end;
+var 
+  v: vector;
+  v2: vector2;
+  vc: vector_cantidad;
+  rub: rango;
+  cod,cod1,cod2: integer;
+begin 
+  inicializo_vector(v);
+  cargar_vector(v);
+  buscar (v, rub, cod);
+  mayor_code(v,v2);
+  codigos(cod1,cod2);
+  entre_codigos(v,cod1,cod2,vc);
+end.
