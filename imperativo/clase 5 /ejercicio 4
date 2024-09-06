@@ -1,0 +1,210 @@
+4. Una oficina requiere el procesamiento de los reclamos de las personas. De cada reclamo
+se ingresa código, DNI de la persona, año y tipo de reclamo. El ingreso finaliza con el
+código de igual a 0. Se pide:
+a) Un módulo que retorne estructura adecuada para la búsqueda por DNI. Para cada DNI
+se deben tener almacenados cada reclamo y la cantidad total de reclamos que realizó.
+b) Un módulo que reciba la estructura generada en a) y un DNI y retorne la cantidad de
+reclamos efectuados por ese DNI.
+c) Un módulo que reciba la estructura generada en a) y dos DNI y retorne la cantidad de
+reclamos efectuados por todos los DNI comprendidos entre los dos DNI recibidos.
+d) Un módulo que reciba la estructura generada en a) y un año y retorne los códigos de
+los reclamos realizados en el año recibido.
+
+
+
+program ejercicio_4;
+type 
+  reclamo = record 
+    codigo: integer;
+    dni: integer;
+    ano: integer;
+    tipo: string;
+  end;
+  
+  lista = ^nodolista;
+    nodolista = record 
+      dato: reclamo;
+      sig: lista;
+    end;
+  
+  almacenado = record
+    reclamos : lista;
+    cant: integer;
+  end;
+  
+  arbol = ^nodo;
+    nodo = record
+      dato: almacenado;
+      hi: arbol;
+      hd: arbol;
+    end;
+  
+  lista2 = ^nodolista2;
+    nodolista2 =  record 
+      dato: integer;
+      sig: lista2;
+    end;
+    
+
+procedure cargo_reclamo(var r:reclamo);
+  begin 
+    writeln('ingrese el codigo');
+    readln(r.codigo);
+    if(r.codigo <> 0 )then begin 
+      writeln('ingrese el dni');
+      readln(r.dni);
+      writeln('ingrese el ano');
+      readln(r.ano);
+      writeln('ingrese el tipo de reclamo');
+      readln(r.tipo);
+    end;
+  end;
+procedure agregaradelante(var l: lista; r:reclamo);
+  var 
+    aux: lista;
+  begin 
+    new(aux);
+    aux^.dato := r;
+    aux^.sig := l;
+    l := aux;
+  end;
+procedure cargar_arbol (var a: arbol; r:reclamo);
+  begin 
+    if(a = nil)then begin 
+      new(a);
+      a^.dato.reclamos := nil;
+      agregaradelante(a^.dato.reclamos,r);
+      a^.dato.cant := 1;
+      a^.hi := nil;
+      a^.hd := nil
+    end
+    else begin 
+      if(a^.dato.reclamos^.dato.dni = r.dni)then begin 
+        agregaradelante(a^.dato.reclamos,r);
+        a^.dato.cant := a^.dato.cant + 1;
+      end
+      else begin 
+        if(a^.dato.reclamos^.dato.dni > r.dni)then begin
+          cargar_arbol(a^.hi,r);
+        end
+        else begin 
+          cargar_arbol(a^.hd,r);
+        end;
+      end;
+    end;
+  end;
+  
+procedure cargar_reclamos (var a: arbol);
+  var 
+    r:reclamo;
+  begin 
+    cargo_reclamo (r);
+    while (r.codigo <> 0)do begin 
+      cargar_arbol(a,r);
+      cargo_reclamo(r);
+    end;
+  end;
+function retorno_cant (a: arbol; dni_buscar: integer): integer;    
+  begin 
+    
+    if(a <> nil)then begin 
+      if(a^.dato.reclamos^.dato.dni = dni_buscar)then begin 
+        retorno_cant := a^.dato.cant;
+      end
+      else begin
+        if(a^.dato.reclamos^.dato.dni > dni_buscar)then begin 
+          retorno_cant := retorno_cant(a^.hi,dni_buscar);
+        end
+        else begin 
+          retorno_cant := retorno_cant(a^.hd,dni_buscar);
+        end;
+      end;
+    end
+    else begin 
+      retorno_cant := 0;
+    end;
+  end;
+procedure cargo_dni (var dni_1 : integer; var dni_2: integer);
+  begin 
+    writeln('ingrese un dni');
+    readln(dni_1);
+    writeln('ingrese un dni que sea mayor a: ',dni_1);
+    readln(dni_2);
+  end;
+function entre_los_dnis(a: arbol; dni_1,dni_2:integer): integer;
+  begin 
+    if(a <> nil)then begin 
+      if(a^.dato.reclamos^.dato.dni > dni_1) and (a^.dato.reclamos^.dato.dni < dni_2)then begin 
+        entre_los_dnis := entre_los_dnis(a^.hi,dni_1,dni_2) + entre_los_dnis(a^.hd,dni_1,dni_2) + a^.dato.cant;
+      end
+      else begin 
+        if(a^.dato.reclamos^.dato.dni <= dni_1)then begin 
+          entre_los_dnis := entre_los_dnis(a^.hd,dni_1,dni_2);
+        end
+        else begin 
+          if(a^.dato.reclamos^.dato.dni >= dni_2)then begin 
+            entre_los_dnis := entre_los_dnis(a^.hi,dni_1,dni_2);
+          end;
+        end;
+      end;
+    end
+    else begin 
+      entre_los_dnis := 0;
+    end;
+  end;
+procedure agregarlista2(var l2: lista2; cod:integer);
+  var 
+    aux: lista2;
+  begin 
+    new(aux);
+    aux^.dato := cod;
+    aux^.sig := l2;
+    l2 := aux;
+  end;
+procedure busco_codigo (l: lista; var l2: lista2; anoo: integer);
+  begin 
+    while (l <> nil)do begin 
+      if(l^.dato.ano = anoo)then begin
+        agregarlista2(l2,l^.dato.codigo);
+      end;
+      l:= l^.sig;
+    end;
+  end;
+procedure recorrer_arbol(a: arbol;anoo: integer; var l2: lista2);
+  begin 
+    if(a <> nil)then begin
+      busco_codigo(a^.dato.reclamos,l2,anoo); 
+      recorrer_arbol(a^.hi,anoo,l2);
+      recorrer_arbol(a^.hd,anoo,l2);
+    end;
+  end;
+procedure recorre_lista2 (l2: lista2);
+  begin 
+    while(l2 <> nil)do begin 
+      writeln('el codigo es ',l2^.dato);
+      l2 := l2^.sig;
+    end;
+  end;
+var 
+  a: arbol;
+  dni_buscar: integer;
+  dni_1,dni_2: integer;
+  anoo: integer;
+  l2: lista2;
+begin 
+  a := nil;
+  cargar_reclamos(a);
+  writeln('');
+  writeln('ingrese un dni a buscar');
+  readln(dni_buscar);
+  writeln('');
+  writeln('la cantidad de reclamos de este dni es: ',retorno_cant(a,dni_buscar));
+  cargo_dni(dni_1,dni_2);
+  writeln('');
+  writeln('la cantidad de reclamos que hay entre todos dni que se encuentan en el medio son ',entre_los_dnis(a,dni_1,dni_2));
+  writeln('');
+  writeln('ingrese un ano ');
+  readln(anoo);
+  recorrer_arbol(a,anoo,l2);
+  recorre_lista2(l2);
+end.
