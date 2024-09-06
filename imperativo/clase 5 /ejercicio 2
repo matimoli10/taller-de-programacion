@@ -195,7 +195,9 @@ procedure agrupados (a1 : arbol1; var v: vector);
     if (a1 <> nil)then begin   
       agrupados(a1^.hd,v);
       agrupados(a1^.hi,v);
-      agregaradelante_lista2(v[a1^.dato.fabricacion],a1^.dato);
+      if(a1^.dato.fabricacion > 2010) and (a1^.dato.fabricacion < dimf) then begin
+        agregaradelante_lista2(v[a1^.dato.fabricacion],a1^.dato);
+      end;
     end;
   end;
 procedure buscar_patente (a1: arbol1; pat_ele: integer; var modelo_auto: string);
