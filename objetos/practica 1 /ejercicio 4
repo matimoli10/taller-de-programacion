@@ -1,0 +1,48 @@
+/*4- Un edificio de oficinas está conformado por 8 pisos (1..8) y 4 oficinas por piso
+(1..4). Realice un programa que permita informar la cantidad de personas que
+concurrieron a cada oficina de cada piso. Para esto, simule la llegada de personas al
+edificio de la siguiente manera: a cada persona se le pide el nro. de piso y nro. de
+oficina a la cual quiere concurrir. La llegada de personas finaliza al indicar un nro.
+de piso 9. Al finalizar la llegada de personas, informe lo pedido.
+*/
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package practica1.pkg;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.Lector;
+public class ejercicio4 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        int [][] edificio = new int [8][4];
+        int i;
+        int j;
+        for (i = 0;i < 8;i++)
+            for(j = 0; j <= 3; j++)
+                edificio [i][j] = 0;
+        System.out.println("ingrese en numero de piso del 1 al 8 ");
+        i = Lector.leerInt();
+        while (i != 9){
+            System.out.println("ingrese el numero de oficiona del 1 al 4");
+            j = Lector.leerInt();
+            edificio[i-1][j-1]++;
+            System.out.println("ingrese en numero de piso del 1 al 8 ");
+            i = Lector.leerInt();
+        }
+        for (i = 0; i < 8;i++)
+            for(j = 0; j <= 3; j++)
+                System.out.println("la cantidad que concurrieron en el piso "+(i+1)+" en la oficina "+(j+1)+" es: "+ edificio[i][j]);
+    }   
+}
