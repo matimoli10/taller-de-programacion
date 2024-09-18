@@ -1,0 +1,44 @@
+/*1- Analice el programa Ej01Tabla2.java, que carga un vector que representa la tabla
+del 2.
+Genere enteros aleatorios hasta obtener el número 11. Para cada número muestre
+el resultado de multiplicarlo por 2 (accediendo al vector).*/
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package practica1.pkg;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.GeneradorAleatorio;
+public class Ejercicio1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        int df = 11;
+        int act;
+        int [] tabla = new int[df];
+        for (int i=0; i < df; i++){
+            tabla [i] = 2 * i; 
+            System.out.println("imprimo valores de la tabla del 2 x "+i+" = "+ tabla[i]);
+        }
+        System.out.println("----------------");
+        GeneradorAleatorio.iniciar();
+        act = GeneradorAleatorio.generarInt(12);
+        while ( act != df){
+            System.out.println("el numero generado aleatoria mente es: "+ act);
+            System.out.println("la multiplicacion de 2 x "+act+" = "+ tabla[act--]);
+            System.out.println("--------");
+            act = GeneradorAleatorio.generarInt(12);
+        }
+        System.out.println("salio el numero 11 ");
+        }   
+    }
