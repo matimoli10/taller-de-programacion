@@ -1,0 +1,74 @@
+/*3- Escriba un programa que defina una matriz de enteros de tamaño 5x5. Inicialice
+la matriz con números aleatorios entre 0 y 30.
+Luego realice las siguientes operaciones:
+- Mostrar el contenido de la matriz en consola.
+- Calcular e informar la suma de los elementos de la fila 1
+- Generar un vector de 5 posiciones donde cada posición j contiene la suma
+de los elementos de la columna j de la matriz. Luego, imprima el vector.
+- Leer un valor entero e indicar si se encuentra o no en la matriz. En caso de
+encontrarse indique su ubicación (fila y columna) en caso contrario
+imprima “No se encontró el elemento”.
+NOTA: Dispone de un esqueleto para este programa en Ej03Matrices.java
+*/
+
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package practica1.pkg;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.GeneradorAleatorio;
+import PaqueteLectura.Lector;
+public class ejercicio3 {
+    public static void main (String [] args){
+    int [][] matriz = new int [5][5];
+    GeneradorAleatorio.iniciar();
+    int i;
+    int j;
+    int suma = 0;
+    int [] vector = new int [5];
+    int valor;
+    int fila = -1;
+    int columna = -1;
+    for (i = 0; i < 5;i++){
+        for(j = 0; j <= 4;j++){
+            matriz [i][j] = GeneradorAleatorio.generarInt(31);
+            System.out.println("la matriz "+(i+1)+" "+(j+1)+" tiene "+matriz[i][j]);
+        }
+        System.out.println("--------");
+    }
+    for (j = 0;j < 5 ;j++)
+        vector[j] = 0;
+    System.out.println("ingrese el valor entero que desea buscar en la matriz");
+    valor = Lector.leerInt();
+    System.out.println("--------");
+    for (i = 0;i < 5; i++){
+        for( j = 0; j < 5; j++){
+            System.out.println("la matriz "+(i+1)+" "+(j+1)+" tiene "+matriz[i][j]);
+            if (i == 0)
+                suma = suma + matriz [i][j];
+            vector[j] = vector [j] + matriz[i][j]; 
+            if(matriz[i][j] == valor){
+                fila = i;
+                columna = j;
+            }
+        }
+        System.out.println("--------");
+    }
+        System.out.println("la suma de los elementos de la fila 1 es: "+suma );
+        System.out.println("--------");
+        for (j = 0;j < 5; j++)
+            System.out.println("la suma de la columna "+ (j+1) +" es "+ vector[j]);
+        System.out.println("--------");
+        if(fila != -1)
+            System.out.println("se encontro el valor en la fila "+ fila +" y en la columna "+ columna +" de la matriz");
+        else 
+            System.out.println("no se encontro el valor en la matriz");
+    }
+}
