@@ -41,6 +41,7 @@ public class ejercicio3 {
         ejercicio3 [][] entrevista = new ejercicio3 [5][8];
         String termina = new String("zzz");
         boolean cumple;
+        boolean primercaso = true;
         String unnombre;
         int undni = 0;
         int unedad = 0;
@@ -63,6 +64,8 @@ public class ejercicio3 {
            cupo = (undia+1) * (unturno+1);
            System.out.println("------------------");
         }
+        else 
+            primercaso = false;
         while (cupo < 40 && cumple == true){
            persona = new ejercicio3(unnombre, undni, unedad, undia, unturno);
            entrevista [undia][unturno] = persona;
@@ -98,27 +101,28 @@ public class ejercicio3 {
         }
         ultdia = undia;
         System.out.println("------------------");
-        System.out.println((ultdia+1));
-        System.out.println((ultturno+1));
         System.out.println("------------------");
-        System.out.println("------------------");
-        for (int i = 0; i <= ultdia; i++){
-            if (i != ultdia){
-                for (int j = 0; j <= 7; j++){
-                    System.out.println("en el dia " + (i+1));
-                    System.out.println("en el turno "+ (j+1));
-                    System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
-                    System.out.println("------------------------");
+        if (primercaso == true){
+            for (int i = 0; i <= ultdia; i++){
+                if (i != ultdia){
+                    for (int j = 0; j <= 7; j++){
+                        System.out.println("en el dia " + (i+1));
+                        System.out.println("en el turno "+ (j+1));
+                        System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
+                        System.out.println("------------------------");
+                    }
                 }
-            }
-            else {
-                for (int j = 0; j <= ultturno; j++){
-                    System.out.println("en el dia " + (i+1));
-                    System.out.println("en el turno "+(j+1));
-                    System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
-                    System.out.println("------------------------");
+                else {
+                    for (int j = 0; j <= ultturno; j++){
+                        System.out.println("en el dia " + (i+1));
+                        System.out.println("en el turno "+(j+1));
+                        System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
+                        System.out.println("------------------------");
+                    }
                 }
             }
         }
+        else 
+            System.out.println("no hay gente anotada para las entrevistas");
      } 
 }
