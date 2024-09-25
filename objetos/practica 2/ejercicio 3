@@ -1,0 +1,124 @@
+/*3- Se realizará un casting para un programa de TV. El casting durará a lo sumo 5 días y en
+cada día se entrevistarán a 8 personas en distinto turno.
+a) Simular el proceso de inscripción de personas al casting. A cada persona se le pide
+nombre, DNI y edad y se la debe asignar en un día y turno de la siguiente manera: las
+personas primero completan el primer día en turnos sucesivos, luego el segundo día y así
+siguiendo. La inscripción finaliza al llegar una persona con nombre “ZZZ” o al cubrirse los
+40 cupos de casting.
+Una vez finalizada la inscripción:
+b) Informar para cada día y turno asignado, el nombre de la persona a entrevistar.
+NOTA: utilizar la clase Persona. Pensar en la estructura de datos a utilizar. Para comparar
+Strings use el método equals.*/
+
+
+package practica.pkg2;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.Lector;
+public class ejercicio3 {
+    /**
+     * @param args the command line arguments
+     */
+    private String nombre;
+    private int dni;
+    private int edad;
+    private int dia;
+    private int turno;
+    
+    public ejercicio3(String unnombre, int undni, int unedad, int undia,int unturno) {
+        nombre = unnombre;
+        dni = undni;
+        edad = unedad;
+        dia = undia;
+        turno = unturno;
+    }
+    public static void main(String[] args) {
+        // TODO code application logic here
+        ejercicio3 persona;
+        ejercicio3 [][] entrevista = new ejercicio3 [5][8];
+        String termina = new String("zzz");
+        boolean cumple;
+        String unnombre;
+        int undni = 0;
+        int unedad = 0;
+        int undia = 0;
+        int unturno = 0;
+        int cupo = 0;
+        int ultturno = 0;
+        int ultdia;
+        
+        System.out.println("ingrese el nombre");
+        unnombre = Lector.leerString();
+        cumple = !unnombre.equals(termina);
+        if(cumple == true){
+           System.out.println("ingrese el dni");
+           undni = Lector.leerInt();
+           System.out.println("ingrese la edad");
+           unedad = Lector.leerInt();
+           System.out.println("fue asignado al dia "+ (undia+1));
+           System.out.println("fue asignado al turno"+ (unturno+1));
+           cupo = (undia+1) * (unturno+1);
+           System.out.println("------------------");
+        }
+        while (cupo < 40 && cumple == true){
+           persona = new ejercicio3(unnombre, undni, unedad, undia, unturno);
+           entrevista [undia][unturno] = persona;
+           if (unturno < 7){
+               ultturno = unturno;
+               unturno++;  
+            }
+           else {
+               ultturno = unturno;
+               unturno = 0;
+               if(undia < 4){
+                  ultdia = undia;
+                  undia++;
+                }
+                else{
+                   ultdia = undia;
+                   undia = 0;
+                }
+            }
+           System.out.println("ingrese el nombre");
+           unnombre = Lector.leerString();
+           cumple = !unnombre.equals(termina);
+           if(cumple ){
+               System.out.println("ingrese el dni");
+               undni = Lector.leerInt();
+               System.out.println("ingrese la edad");
+               unedad = Lector.leerInt();
+               System.out.println("fue asignado al dia "+ (undia+1));
+               System.out.println("fue asignado al turno "+ (unturno+1));
+               cupo = (undia+1) * (unturno+1); 
+               System.out.println("------------------");
+           }
+        }
+        ultdia = undia;
+        System.out.println("------------------");
+        System.out.println((ultdia+1));
+        System.out.println((ultturno+1));
+        System.out.println("------------------");
+        System.out.println("------------------");
+        for (int i = 0; i <= ultdia; i++){
+            if (i != ultdia){
+                for (int j = 0; j <= 7; j++){
+                    System.out.println("en el dia " + (i+1));
+                    System.out.println("en el turno "+ (j+1));
+                    System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
+                    System.out.println("------------------------");
+                }
+            }
+            else {
+                for (int j = 0; j <= ultturno; j++){
+                    System.out.println("en el dia " + (i+1));
+                    System.out.println("en el turno "+(j+1));
+                    System.out.println("tiene la entrevista "+ entrevista[i][j].nombre);
+                    System.out.println("------------------------");
+                }
+            }
+        }
+     } 
+}
