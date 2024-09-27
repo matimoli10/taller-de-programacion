@@ -8,70 +8,69 @@ obtener edad 0. Luego de almacenar la información:
 
 package practica.pkg2;
 
-/**
- *
- * @author PC
- */
 import PaqueteLectura.GeneradorAleatorio;
 public class ejercicio2 {
+
     /**
      * @param args the command line arguments
      */
-    private String nombre;
-    private int dni;
-    private int edad;
-    
-    public ejercicio2(String unNombre, int unDni, int unEdad) {
-        nombre = unNombre;
-        dni = unDni;
-        edad = unEdad;
-    }
     public static void main(String[] args) {
         // TODO code application logic here
+        persona [] vector = new persona [15];
         String unnombre;
         int undni;
         int unedad;
         int diml = 0;
         int cant = 0;
-        int menordni = 0;
-        int act = 999;
         
-        
-        
+        int dni_act = 9999;
+        persona pAct;
+        pAct = new persona();
         GeneradorAleatorio.iniciar();
-        unnombre = GeneradorAleatorio.generarString(8);
+        unnombre = GeneradorAleatorio.generarString(6);
         undni = GeneradorAleatorio.generarInt(10);
-        unedad = 1 + GeneradorAleatorio.generarInt(100);  
-        ejercicio2 persona;
-        ejercicio2 [] vector = new ejercicio2 [15];
-        while (diml <= 14 && unedad > 0) {
-           persona = new ejercicio2 (unnombre,undni,unedad);
-           vector[diml] = persona;
-           unnombre = GeneradorAleatorio.generarString(8);
-           diml++;
-           undni = GeneradorAleatorio.generarInt(10);
-           unedad = GeneradorAleatorio.generarInt(100);
-        } 
-        if(diml != 0){
-           diml--;
+        unedad = GeneradorAleatorio.generarInt(100);
+        System.out.println("nombre " + unnombre);
+        System.out.println("dni " + undni);
+        System.out.println("edad " + unedad);
+        pAct.setNombre(unnombre);
+        pAct.setDNI(undni);
+        pAct.setEdad(unedad);
+        System.out.println(pAct.toString());
+        System.out.println("--------------------------");
+        while (diml <= 14 && unedad != 0){
+            vector[diml] = pAct;
+            diml++;
+            unnombre = GeneradorAleatorio.generarString(6);
+            undni = GeneradorAleatorio.generarInt(10);
+            unedad = GeneradorAleatorio.generarInt(100);
+            pAct = new persona();
+            System.out.println("nombre " + unnombre);
+            pAct.setNombre(unnombre);
+            System.out.println("dni " + undni);
+            pAct.setDNI(undni);
+            System.out.println("edad " + unedad);
+            pAct.setEdad(unedad);
+            System.out.println(pAct.toString()); 
+            System.out.println("-----------------");
         }
-        for (int i = 0; i <= diml;i++){
-           if(vector[i].edad > 65){
-               cant++;
-           }
-           if(vector[i].dni < act){
-              act = vector[i].dni;
-              menordni = i;
-           }
-            System.out.println(vector[i].nombre);
-            System.out.println(vector[i].dni);
-            System.out.println(vector[i].edad);
-            System.out.println("-----------");   
+      
+        if(diml != 0 ){
+            diml--;
+            for (int i=0;i <= diml;i++){
+                System.out.println(vector[i].toString()+i);
+                if(vector[i].getEdad() > 65)
+                    cant++;
+                if(vector[i].getDNI() < dni_act){
+                    pAct = vector[i];
+                    dni_act = vector[i].getDNI();
+                }
+            }
+            System.out.println("la cantidad de personas que superan los 65 son: "+ cant);
+            System.out.println("la persona con menor dni es: ");
+            System.out.println(pAct.toString());
         }
-        System.out.println("la cantidad de personas mayores a 65 anos son: "+ cant);
-        System.out.println("la persona con menor dni es: ");
-        System.out.println("  nombre "+vector[menordni].nombre);
-        System.out.println("  dni "+vector[menordni].dni);
-        System.out.println("  edad "+vector[menordni].edad);
-    } 
+        else 
+            System.out.println("no se a cargardo ninguna persona");
+    }   
 }
