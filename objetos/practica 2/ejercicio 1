@@ -16,69 +16,49 @@ muestre en consola la representación de ese objeto en formato String.*/
 
 package practica.pkg2;
 
-/**
- *
- * @author PC
- */
 import PaqueteLectura.Lector;
 public class ejercicio1 {
-
-    /**
-     * @param args the command line arguments
-     */
-    private String nombre;
-    private String dni;
-    private String edad;
-   
-    public ejercicio1 (String unnombre,String undni,String unedad){
-      nombre = unnombre;
-      dni = undni;
-      edad = unedad;
-    }
-    /*
-    public ejercicio1 () {
-
-    }
     
-    public String getNombre() {
-        return nombre;
-    }
-    public int getDni() {
-        return dni;
-    }
-    public int getEdad() {
-        return edad;
-    }
     
-    public void setNombre(String unnombre) {
-        nombre = unnombre;
-    }
     
-    public void setDni(int undni) {
-        dni = undni;
-    }
-    
-    public void setEdad(int unedad) {
-        edad = unedad;
-    }
-    */ 
     public static void main(String[] args) {
         // TODO code application logic here
-        String unnombre;
-        String undni;
-        String unedad;
+        persona p1 = new persona ();
+        persona p2 = new persona ();
+        String unnombre = new String("mati");
+        int undni = 45131947 ;
+        int unedad = 20;
+        
+        p1.setNombre(unnombre);
+        p1.setDNI(undni);
+        p1.setEdad(unedad);
+        System.out.println("el nombre es: "+ p1.getNombre()); 
+        System.out.println("el dni es: "+ p1.getDNI()); 
+        System.out.println("la edad es: "+ p1.getEdad()); 
+        System.out.println("---------------------");
+        System.out.println("ingrese una persona para ver si es mayor ");
+        System.out.println("---------------------");
         System.out.println("ingrese el nombre");
         unnombre = Lector.leerString();
+        p2.setNombre(unnombre);
         System.out.println("ingrese el dni");
-        undni = Lector.leerString();
+        undni = Lector.leerInt();
+        p2.setDNI(undni);
         System.out.println("ingrese la edad");
-        unedad = Lector.leerString();
-        //System.out.println(unnombre.charAt(3));
-        ejercicio1 persona = new ejercicio1(unnombre,undni,unedad);        
-        System.out.println("---------");
-        System.out.println(persona.nombre);
-        System.out.println(persona.dni);
-        System.out.println(persona.edad);
-        System.out.println("---------");
-    }    
+        unedad = Lector.leerInt();
+        p2.setEdad(unedad);
+        System.out.println("---------------------");
+        System.out.println("el nombre es: "+ p2.getNombre()); 
+        System.out.println("el dni es: "+ p2.getDNI()); 
+        System.out.println("la edad es: "+ p2.getEdad()); 
+        System.out.println("---------------------");
+        if(p1.getEdad() >= p2.getEdad())
+            System.out.println("la persona "+ p1.getNombre() +" es mayor ");
+        else 
+            System.out.println("la persona "+ p2.getNombre() +" es mayor ");
+        System.out.println("---------------------");
+        System.out.println(p1.toString());
+        System.out.println("---------------------");
+        System.out.println(p2.toString());
+    }   
 }
