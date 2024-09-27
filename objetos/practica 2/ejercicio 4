@@ -1,0 +1,95 @@
+/*4- Sobre un nuevo programa, modifique el ejercicio anterior para considerar que:
+a) Durante el proceso de inscripción se pida a cada persona sus datos (nombre, DNI, edad)
+y el día en que se quiere presentar al casting. La persona debe ser inscripta en ese día, en el
+siguiente turno disponible. En caso de no existir un turno en ese día, informe la situación.
+La inscripción finaliza al llegar una persona con nombre “ZZZ” o al cubrirse los 40 cupos de
+casting.
+Una vez finalizada la inscripción:
+b) Informar para cada día: la cantidad de inscriptos al casting ese día y el nombre de la
+persona a entrevistar en cada turno asignado.*/
+
+
+
+package practica.pkg2;
+
+import PaqueteLectura.Lector;
+public class ejercicio4 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        persona [][] entrevista = new persona[5][8];
+        int [] ocupados = new int [5];
+        persona p1 = null;
+        String unnombre;
+        int undni;
+        int unedad;
+        int i = 0;
+        int j = 0;
+        int cupo = 0;
+        boolean cargando = false;
+        int diml;
+       
+        System.out.println("ingrese el nombre");
+        unnombre = Lector.leerString();
+        if(!unnombre.equals("zzz")){
+           p1 = new persona();
+           p1.setNombre(unnombre);
+           System.out.println("ingrese el dni ");
+           undni =  Lector.leerInt();
+           p1.setDNI(undni);
+           System.out.println("ingrese la edad");   
+           unedad = Lector.leerInt();
+           p1.setEdad(unedad);
+           System.out.println("ingrese que dia de los 5 quiere tener la entrevista"); 
+           i = Lector.leerInt();
+           ocupados[--i] = ++ocupados[i];
+           System.out.println("la entrevista le quedo el dia "+(i+1)+" en el turno "+(j+1));
+           cupo++;
+           System.out.println("-------------------------");
+        }
+        while (cupo < 40 && !unnombre.equals("zzz")){
+            entrevista [i][j] = p1;
+            cargando = false;
+            System.out.println("ingrese el nombre");
+            unnombre = Lector.leerString();
+            if(!unnombre.equals("zzz")){
+                p1 = new persona();
+                p1.setNombre(unnombre);
+                System.out.println("ingrese el dni ");
+                undni =  Lector.leerInt();
+                p1.setDNI(undni);
+                System.out.println("ingrese la edad");   
+                unedad = Lector.leerInt();
+                p1.setEdad(unedad);
+                while (cargando == false){
+                    System.out.println("ingrese que dia de los 5 quiere tener la entrevista"); 
+                    i = Lector.leerInt();
+                    if (ocupados[--i] <= 7 ){
+                        j = ocupados[i];
+                         ocupados[i] = ++ocupados[i];
+                        System.out.println("la entrevista le quedo el dia "+(i+1)+" en el turno "+(j+1));
+                         cupo++;
+                         cargando = true;
+                    }
+                    else {
+                        System.out.println("en el dia seleccionado no quedan turnos disponibles");
+                        System.out.println("-------------------------");
+                        System.out.println("selecciones otro dia");
+                    }
+                }
+            }
+            System.out.println("-------------------------");
+        
+        }
+        for (i = 0; i < 5;i++){
+            System.out.println("la cantidad de inscriptos para el dia "+(i+1)+" son: "+ocupados[i]--);
+            for(j = 0;j <= ocupados[i];j++){
+                System.out.println("en el turno "+(j+1)+" tenemos a "+entrevista[i][j].getNombre());
+            }
+            System.out.println("-------------------------");
+        }
+    } 
+}
