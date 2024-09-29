@@ -1,0 +1,56 @@
+package practica.pkg3;
+
+/**
+ *
+ * @author PC
+ */
+public class circulo {
+    private double radio;
+    private String relleno;
+    private String linea;
+    private double perimetro;
+    private double area;
+
+    public double getPerimetro(double radio) {
+        this.perimetro = 2*Math.PI*radio ;
+        return perimetro;
+    }
+
+    public double getArea(double radio) {
+        area = Math.PI*(radio*radio);
+        return area;
+    }
+
+    public circulo(double radio, String relleno, String linea) {
+        this.radio = radio;
+        this.relleno = relleno;
+        this.linea = linea;
+    }
+    
+    
+    public double getRadio() {
+        return radio;
+    }
+
+    public void setRadio(double radio) {
+        this.radio = radio;
+    }
+
+    public String getRelleno() {
+        return relleno;
+    }
+
+    public void setRelleno(String relleno) {
+        this.relleno = relleno;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
+    }
+    
+    
+}
