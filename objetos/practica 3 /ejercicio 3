@@ -1,0 +1,100 @@
+/*3-A- Defina una clase para representar estantes. Un estante almacena a lo sumo 20 libros.
+Implemente un constructor que permita iniciar el estante sin libros. Provea métodos para:
+(i) devolver la cantidad de libros que almacenados (ii) devolver si el estante está lleno
+(iii) agregar un libro al estante (iv) devolver el libro con un título particular que se recibe.
+B- Realice un programa que instancie un estante. Cargue varios libros. A partir del estante,
+busque e informe el autor del libro “Mujercitas”.
+C- Piense: ¿Qué modificaría en la clase definida para ahora permitir estantes que
+almacenen como máximo N libros? ¿Cómo instanciaría el estante?*/
+
+
+package practica.pkg3;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.Lector;
+public class ejercicio3 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        estantes e1 ;
+        int i ;
+        int diml;
+        int max;
+        
+        libro libro1;
+        String titulo;
+        autor a1;
+            String nombre;
+            String biografia;
+            String origen;
+        String editorial;
+        int anoedicion;
+        String isbn;
+        double precio;
+        
+        System.out.println("ingrese la cantidad de libros que entran en el estante");
+        max = Lector.leerInt();
+        System.out.println("-----------------------");
+        System.out.println("ingrese el titulo del libro");
+        titulo = Lector.leerString();
+        System.out.println("ingrese el nombre del autor");
+        nombre = Lector.leerString();
+        System.out.println("ingrese su biografia ");
+        biografia = Lector.leerString();
+        System.out.println("ingrese el origen del autor");
+        origen = Lector.leerString();
+        System.out.println("ingrese la editorial con la que se hizo el libro");
+        editorial = Lector.leerString();
+        System.out.println("ingrese el ano de edicion ");
+        anoedicion = Lector.leerInt();
+        System.out.println("ingrese el isbn del libro");
+        isbn = Lector.leerString();
+        System.out.println("ingrese el precio");
+        precio = Lector.leerDouble();
+        System.out.println("---------------------");
+        e1 = new estantes(max);
+        for(i = 0;i < max && !titulo.equals("zzz");i++){
+            a1 = new autor(nombre,biografia,origen);
+            libro1 = new libro(titulo,a1,editorial,anoedicion,isbn,precio);
+            e1.setLugares(libro1, e1.getDiml());
+            if(e1.getEspacio(e1.getDiml())){    
+                System.out.println("ingrese el titulo del libro");
+                titulo = Lector.leerString();
+                System.out.println("ingrese el nombre del autor");
+                nombre = Lector.leerString();
+                System.out.println("ingrese su biografia ");
+                biografia = Lector.leerString();
+                System.out.println("ingrese el origen del autor");
+                origen = Lector.leerString();
+                System.out.println("ingrese la editorial con la que se hizo el libro");
+                editorial = Lector.leerString();
+                System.out.println("ingrese el ano de edicion ");
+                anoedicion = Lector.leerInt();
+                System.out.println("ingrese el isbn del libro");
+                isbn = Lector.leerString();
+                System.out.println("ingrese el precio");
+                precio = Lector.leerDouble();
+                System.out.println("---------------------");
+            }
+            else {
+                System.out.println("se a quedado sin espacio en el estante");
+            }
+        }
+            diml = e1.getDiml() - 1;
+            for (i= 0; i<=diml; i++){
+                System.out.println(e1.toString(i));
+                if(e1.getLugares(i).getTitulo().equals("mujercitas")){
+                    System.out.println("se encontro el libro");
+                    System.out.println(e1.toString(i));
+                }
+            }
+            
+    }
+    
+}
