@@ -1,0 +1,43 @@
+package practica.pkg3;
+
+/**
+ *
+ * @author PC
+ */
+public class hotel {
+    private int cant;
+    private habitacion [] habitaciones;
+
+    public hotel(int cant) {
+        this.cant = cant;
+        habitaciones = new habitacion[cant];
+    }
+    
+    public int getCant() {
+        return cant;
+    }
+
+    public void setCant(int cant) {
+        this.cant = cant;
+    }
+
+    public habitacion getHabitaciones(int diml) {
+        habitacion h1;
+        h1 = habitaciones[diml];
+        return h1;
+    }
+
+    public void setHabitaciones(habitacion habitaciones,int diml) {
+        
+        this.habitaciones [diml] = habitaciones;
+    }
+
+    public String toString(int diml) {
+        String aux;
+        aux = habitaciones[diml].toString(diml);
+        return aux;
+    }
+    
+
+    
+}
