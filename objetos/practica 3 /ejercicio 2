@@ -1,0 +1,58 @@
+/*2-A- Modifique la clase Libro.java (carpeta tema3) para ahora considerar que el primer
+autor es un objeto instancia de la clase Autor.
+Implemente la clase Autor, sabiendo que se caracterizan por nombre, biografía y origen
+y que deben permitir devolver/modificar el valor de sus atributos y devolver una
+representación String formada por nombre, biografía y origen.
+Luego realice las modificaciones necesarias en la clase Libro.
+B- Modifique el programa Demo01Constructores (carpeta tema3) para instanciar los libros
+con su autor, considerando las modificaciones realizadas. Luego, a partir de uno de los
+libros instanciados, obtenga e imprima la representación del autor de ese libro.*/
+
+
+
+package practica.pkg3;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.Lector;
+public class ejercicio2 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        String titulo;
+        String nombre;
+        String biografia;
+        String origen;
+        String editorial;
+        int anoedicion;
+        String isbn;
+        double precio;
+        autor a1;
+        libro libro1;
+        System.out.println("ingrese el titulo del libro");
+        titulo = Lector.leerString();
+        System.out.println("ingrese el nombre del autor");
+        nombre = Lector.leerString();
+        System.out.println("ingrese su biografia ");
+        biografia = Lector.leerString();
+        System.out.println("ingrese el origen del autor");
+        origen = Lector.leerString();
+        System.out.println("ingrese la editorial con la que se hizo el libro");
+        editorial = Lector.leerString();
+        System.out.println("ingrese el ano de edicion ");
+        anoedicion = Lector.leerInt();
+        System.out.println("ingrese el isbn del libro");
+        isbn = Lector.leerString();
+        System.out.println("ingrese el precio");
+        precio = Lector.leerDouble();
+        a1 = new autor(nombre,biografia,origen);
+        libro1 = new libro(titulo,a1,editorial,anoedicion,isbn,precio);
+        System.out.println(libro1.toString());
+    }
+    
+}
