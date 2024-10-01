@@ -9,12 +9,6 @@ public class habitacion {
     private boolean ocupada;
     private persona cliente;
 
-    public habitacion(double cost, persona cliente) {
-        this.cost = cost;
-        this.ocupada = true;
-        this.cliente = cliente;
-    }
-
     public habitacion(double cost) {
         this.cost = cost;
         this.ocupada = false;
