@@ -36,15 +36,17 @@ public class ejercicio4 {
         // TODO code application logic here
         hotel h;
         int cant;
+        
         int diml;
         habitacion h1;
-        String ocupa;
+        String ingreso = "si";
+        boolean espacio;
         double cost;
         persona p1;
         String nombre;
         int dni;
         int edad;
-        int libre = 0;
+        int libre = 1;
         double aumento;
         
         
@@ -53,33 +55,15 @@ public class ejercicio4 {
         h = new hotel(cant);
         GeneradorAleatorio.iniciar();
         for (diml = 0;diml < cant;diml++){
-            System.out.println("la habitacion "+(diml+1)+" se encuentra ocupada? ");
-            ocupa = Lector.leerString();
             cost = 2000 + GeneradorAleatorio.generarDouble(6001);
-            if(ocupa.equals("si")){
-                System.out.println("ingrese el nombre de la persona que se hospeda en la habitacion "+(diml+1));
-                nombre = Lector.leerString();
-                System.out.println("ingrese el dni de la persona");
-                dni = Lector.leerInt();
-                System.out.println("ingrese la edad de la persona ");
-                edad = Lector.leerInt();
-                p1 = new persona(nombre,dni,edad);
-                h1 = new habitacion(cost,p1);
-                h.setHabitaciones(h1, diml);
+            h1 = new habitacion(cost);
+            h.setHabitaciones(h1, diml);
             }
-            else {
-                h1 = new habitacion(cost);
-                h.setHabitaciones(h1, diml);
-            }
-            System.out.println("----------------------------");
-        }
-        for (diml = 0; diml<cant;diml++){
-            System.out.println(h.getHabitaciones(diml).toString(diml));
-            if(!h.getHabitaciones(diml).getOcupada())
-                libre++;
-        }
-        System.out.println("-----------------------");
-        if(libre != 0){
+        System.out.println("----------------------------");
+        System.out.println("quiere reservar una habitacion ?");
+        ingreso = Lector.leerString();
+        while(h.lugar() && ingreso.equals("si")){
+            System.out.println(h.toString());
             System.out.println("ingrese el nombre de la persona que busca habitacion ");
             nombre = Lector.leerString();
             System.out.println("ingrese el dni de la persona"); 
@@ -93,26 +77,23 @@ public class ejercicio4 {
             System.out.println("-------------------------");
             while(h.getHabitaciones(diml).getOcupada()){            
                 System.out.println("la habitacion seleccionada se encuentra ocupada");
-                System.out.println("ingrese la hitacion en la que se quiere hospedar");
+                System.out.println("ingrese la habitacion en la que se quiere hospedar");
                 diml = Lector.leerInt() - 1;
                 System.out.println("-----------------------");  
             }
-            System.out.println("la habitacion seleccionada se encuenta libre");
-            h.getHabitaciones(diml).setCliente(p1);
+            h.modificohabitacion(diml,p1);
+            espacio = h.lugar();
+            if(espacio){
+                System.out.println("-----------------------"); 
+                System.out.println("quiere reservar una habitacion ?");
+                ingreso = Lector.leerString();
+            }
         }
-        else 
-            System.out.println("no se encuentras habitaciones disponibles por el momento");
+        System.out.println(h.toString());
         System.out.println("-------------------------");
         System.out.println("ingrese cuanto quiere aumentar el precio de las habitaciones");
         aumento = Lector.leerDouble();
-        for (diml = 0; diml<cant;diml++){
-            System.out.println("-------------------------");
-            System.out.println(h.getHabitaciones(diml).toString(diml));
-            cost = aumento + h.getHabitaciones(diml).getCost();
-            h.getHabitaciones(diml).setCost(cost);
-            System.out.println("se modifico el precio de la habitacion "+(diml+1));
-            System.out.println(h.toString(diml));
-            System.out.println("-------------------------");
-        }
+        h.aumentocost(aumento);
+        System.out.println(h.toString());
     }
 }
