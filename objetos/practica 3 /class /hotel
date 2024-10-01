@@ -12,7 +12,32 @@ public class hotel {
         this.cant = cant;
         habitaciones = new habitacion[cant];
     }
-    
+    public void modificohabitacion(int diml,persona p1){
+        habitacion h1;
+        h1 = habitaciones[diml];
+        h1.setCliente(p1);
+    }
+    public boolean lugar(){
+        int i;
+        habitacion h1;
+        boolean disponible = false;
+        for (i = 0; i < cant && disponible != true; i++){
+            h1 = habitaciones[i];
+            if(!h1.getOcupada())
+                disponible = true;
+        }
+        return disponible;
+    }
+    public void aumentocost(double aumento){
+        int i;
+        double nuevocost;
+        habitacion h1;
+        for(i = 0; i < cant;i++){
+          h1 =habitaciones[i];
+          nuevocost = h1.getCost()+aumento;
+          h1.setCost(nuevocost);
+        }
+    }
     public int getCant() {
         return cant;
     }
@@ -31,10 +56,13 @@ public class hotel {
         
         this.habitaciones [diml] = habitaciones;
     }
-
-    public String toString(int diml) {
-        String aux;
-        aux = habitaciones[diml].toString(diml);
+    
+    public String toString() {
+        String aux = "";
+        int i;
+        for (i = 0; i< cant;i++){
+           aux += habitaciones[i].toString(i)+"\n";
+        }
         return aux;
     }
     
