@@ -75,7 +75,7 @@ public class ejercicio4 {
             System.out.println("ingrese la habitacion en la que se quiere hospedar");
             diml = Lector.leerInt() - 1;
             System.out.println("-------------------------");
-            while(h.getHabitaciones(diml).getOcupada()){            
+            while(h.getHabitaciones()[diml].getOcupada()){            
                 System.out.println("la habitacion seleccionada se encuentra ocupada");
                 System.out.println("ingrese la habitacion en la que se quiere hospedar");
                 diml = Lector.leerInt() - 1;
