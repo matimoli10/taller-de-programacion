@@ -12,11 +12,13 @@ public class hotel {
         this.cant = cant;
         habitaciones = new habitacion[cant];
     }
+    
     public void modificohabitacion(int diml,persona p1){
         habitacion h1;
         h1 = habitaciones[diml];
         h1.setCliente(p1);
     }
+    
     public boolean lugar(){
         int i;
         habitacion h1;
@@ -28,6 +30,7 @@ public class hotel {
         }
         return disponible;
     }
+    
     public void aumentocost(double aumento){
         int i;
         double nuevocost;
@@ -38,6 +41,7 @@ public class hotel {
           h1.setCost(nuevocost);
         }
     }
+    
     public int getCant() {
         return cant;
     }
@@ -46,10 +50,8 @@ public class hotel {
         this.cant = cant;
     }
 
-    public habitacion getHabitaciones(int diml) {
-        habitacion h1;
-        h1 = habitaciones[diml];
-        return h1;
+    public habitacion[] getHabitaciones() {
+        return habitaciones;
     }
 
     public void setHabitaciones(habitacion habitaciones,int diml) {
