@@ -1,0 +1,54 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class entrenador extends empleado {
+     private int campeonatos;
+
+    public entrenador(int campeonatos, String nombre, double sueldo, int antiguedad) {
+        super(nombre, sueldo, antiguedad);
+        this.campeonatos = campeonatos;
+    }
+
+    public int getCampeonatos() {
+        return campeonatos;
+    }
+
+    public void setCampeonatos(int campeonatos) {
+        this.campeonatos = campeonatos;
+    }
+     
+    public double calcularefectividad(){
+        double efectividad;
+        efectividad = getCampeonatos() / getAntiguedad();
+        return efectividad;
+    } 
+    public double sueldoacobrar(){
+        double sueldo;
+        sueldo = getSueldobasico()+((getSueldobasico()*getAntiguedad()) / 0.10);
+        if(getCampeonatos() > 0){
+            if(getCampeonatos() < 5){
+                 sueldo = sueldo + 5000;
+            }
+            else {
+                if(getCampeonatos() < 11){
+                     sueldo = sueldo + 30000;
+                }
+                else {
+                   sueldo = sueldo + 50000;
+                }
+            }
+        }
+        return sueldo;   
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "el entrenador "+ super.toString();
+        return aux;
+    }
+    
+}
