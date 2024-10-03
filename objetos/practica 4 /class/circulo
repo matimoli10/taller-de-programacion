@@ -1,0 +1,41 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class circulo extends figura {
+    private double radio;
+
+    public circulo(double radio, String relleno, String linea) {
+        super(relleno, linea);
+        this.radio = radio;
+    }
+
+    public double getRadio() {
+        return radio;
+    }
+
+    public void setRadio(double radio) {
+        this.radio = radio;
+    }
+    
+    public double calculararea(){
+        double area;
+        area = Math.PI * (getRadio()*getRadio());
+        return area;
+    }
+    public double calcularperimetro(){
+        double perimetro;
+        perimetro = 2*Math.PI*getRadio();    
+        return perimetro;
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "el circulo con: "+"\nradio: "+ getRadio() +"\n"+ super.toString();
+        return aux;
+    }
+    
+}
