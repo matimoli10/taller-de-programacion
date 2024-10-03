@@ -1,0 +1,41 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class cuadrado extends figura{
+    private double lado;
+
+    public cuadrado(double lado,String relleno,String linea) {
+        super(relleno,linea);
+        this.lado = lado;
+    }
+
+    public double getLado() {
+        return lado;
+    }
+
+    public void setLado(double lado) {
+        this.lado = lado;
+    }
+    
+    public double calculararea(){
+       double area;
+       area = (getLado()*getLado());
+       return area;
+    }
+    public double calcularperimetro(){
+       double perimetro;
+       perimetro = 4 *getLado();
+       return perimetro;
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "el cuadrado con lado "+ getLado()+ super.toString();
+        return aux;
+    }
+    
+}
