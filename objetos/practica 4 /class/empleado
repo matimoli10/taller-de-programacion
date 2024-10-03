@@ -1,0 +1,52 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public abstract class empleado {
+    private String nombre;
+    private double sueldobasico;
+    private int antiguedad;
+
+    public empleado(String nombre, double sueldo, int antiguedad) {
+        this.nombre = nombre;
+        this.sueldobasico = sueldo;
+        this.antiguedad = antiguedad;
+    }
+    
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public double getSueldobasico() {
+        return sueldobasico;
+    }
+
+    public void setSueldobasico(double sueldobasico) {
+        this.sueldobasico = sueldobasico;
+    }
+    
+    public int getAntiguedad() {
+        return antiguedad;
+    }
+
+    public void setAntiguedad(int antiguedad) {
+        this.antiguedad = antiguedad;
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "llamado "+getNombre()+"\ncobra un sueldo de "+this.sueldoacobrar()+"\ny tiene una efectividad de "+ this.calcularefectividad() ;
+        return aux;
+    }
+    public abstract double calcularefectividad();
+    public abstract double sueldoacobrar();
+    
+}
