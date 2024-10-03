@@ -1,0 +1,55 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class jugador extends empleado{
+     private int partidosjugados;
+     private int goles;
+
+    public jugador(int partidosjugados, int goles, String nombre, double sueldo, int antiguedad) {
+        super(nombre, sueldo, antiguedad);
+        this.partidosjugados = partidosjugados;
+        this.goles = goles;
+    }
+     
+
+    public int getPartidosjugados() {
+        return partidosjugados;
+    }
+
+    public void setPartidosjugados(int partidosjugados) {
+        this.partidosjugados = partidosjugados;
+    }
+
+    public int getGoles() {
+        return goles;
+    }
+
+    public void setGoles(int goles) {
+        this.goles = goles;
+    }
+    
+    public double calcularefectividad(){
+        double efectividad;
+        efectividad = getGoles() / getPartidosjugados();
+        return efectividad;
+    } 
+    public double sueldoacobrar(){
+        double sueldo;
+        sueldo = getSueldobasico()+((getSueldobasico()*getAntiguedad()) / 0.10);
+        if(calcularefectividad() > 0.5){
+            sueldo = sueldo + getSueldobasico();
+        }
+        return sueldo;
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "el jugador "+ super.toString();
+        return aux;
+    }
+    
+}
