@@ -1,0 +1,53 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public abstract class figura {
+    private String relleno;
+    private String linea;
+    
+    public figura(String relleno, String linea) {
+        setRelleno(relleno);
+        setLinea(linea);
+    }
+
+    public String getRelleno() {
+        return relleno;
+    }
+
+    public void setRelleno(String relleno) {
+        this.relleno = relleno;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public void setLinea(String linea) {
+        this.linea = linea;
+    }
+
+    public abstract double calculararea();
+    public abstract double calcularperimetro();
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = "   el color de relleno es: "+getRelleno() +
+              "\n   el color de linea es: "+ getLinea()+
+              "\n   el area es: "+ this.calculararea()+
+              "\n   el perimetro es: "+ this.calcularperimetro();
+        return  aux;
+    }
+    public void despintar(){
+        String defaultlinea = "negro";
+        String defaultrelleno = "blanco";
+        setLinea(defaultlinea);
+        setRelleno(defaultrelleno);
+    }
+    
+    
+    
+}
