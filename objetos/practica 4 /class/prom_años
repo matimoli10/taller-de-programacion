@@ -1,0 +1,89 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class prom_años extends prom_meses{
+    private prom_meses [] vectoranos;
+    private double [] vPromano;
+
+    public prom_años(String nombre, double latitud, String seencuentra, int N, int A) {
+        super(nombre, latitud, seencuentra, N, A);
+        vectoranos = new prom_meses [ getN() - getA()];
+        vPromano = new double [ getN() - getA()];
+        int i;
+        prom_meses p;
+        double total = 0 ;
+        double prom;
+        for(i = 0; i < (getN() - getA());i++ ){
+            p = new prom_meses(nombre,latitud,seencuentra,N,A);
+            for (int j = 0; j < 12;j++){
+                vectoranos [i] = p;
+                total = total + p.tempdelmes(j);
+            }
+            prom = calcularpromedioanos(total);
+            vPromano [i] = prom;
+        }
+        
+    }
+    public double temptotaldelano(prom_meses p){
+        double total = 0;
+        for(int i=0;i<12;i++){
+            total = total + p.tempdelmes(i);
+        }
+        return total;
+    
+    }
+
+    public prom_meses[] getVectoranos() {
+        return vectoranos;
+    }
+
+    public void setVectoranos(prom_meses[] vectoranos,int i) {
+        vectoranos[i].setTotal(getAno());
+    }
+
+    public double[] getvPromano() {
+        return vPromano;
+    }
+
+    public void setvPromano(double[] vPromano) {
+        this.vPromano = vPromano;
+    }
+    
+    public double calcularpromedioanos(double total){
+        double prom ;
+        prom = total / 12;
+        return prom;
+    } 
+    
+    public void registrotemp(){
+        
+        int i;
+        for (i = getA(); i < getN() && i != getAno(); i++){
+             
+        } 
+        if(i == getAno()){
+            int j;
+            setVectoranos(vectoranos,i);
+            for (j = 0; j < 12 && j != getMes(); j++){
+                
+            }
+            if( j == getMes()){
+                vectoranos[j].setVectormeses(j);
+            }
+        }
+    }
+    @Override
+    public String toString() {
+        String aux ="";
+        for(int i=0; i < (getN()-getA());i++){
+            aux += "ano: "+(getA()+i)+" : "+ vPromano[i]+"\n";
+            aux += super.toString();
+            aux += "----------------------------\n";
+        }
+        return aux;
+    }
+    
+}
