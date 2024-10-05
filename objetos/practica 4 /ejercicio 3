@@ -1,0 +1,52 @@
+/*3-A- Implemente las clases para el siguiente problema. Una garita de seguridad quiere
+identificar los distintos tipos de personas que entran a un barrio cerrado. Al barrio pueden
+entrar: personas, que se caracterizan por nombre, DNI y edad; y trabajadores, estos son
+personas que se caracterizan además por la tarea realizada en el predio.
+Implemente constructores, getters y setters para las clases. Además tanto las personas
+como los trabajadores deben responder al mensaje toString siguiendo el formato:
+▪ Personas “Mi nombre es Mauro, mi DNI es 11203737 y tengo 70 años”
+▪ Trabajadores “Mi nombre es Mauro, mi DNI es 11203737 y tengo 70 años. Soy
+jardinero.”
+B- Realice un programa que instancie una persona y un trabajador y muestre la
+representación de cada uno en consola.
+NOTA: Reutilice la clase Persona (carpeta tema2).
+*/
+
+
+
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+import PaqueteLectura.Lector;
+public class ejercicio3 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        persona p1;
+        String nombre = "pedro";
+        int dni = 123456;
+        int edad = 45;
+        trabajadores t1;
+        String ocupacion;
+        
+        p1 = new persona(nombre,dni,edad);
+        System.out.println("ingrese el nombre: ");
+        nombre = Lector.leerString();
+        System.out.println("ingrese el dni ");
+        dni = Lector.leerInt();
+        System.out.println("ingrese la edad");
+        edad = Lector.leerInt();
+        System.out.println("ingrese la ocupacion");
+        ocupacion = Lector.leerString();
+        t1 = new trabajadores(ocupacion,nombre,dni,edad);
+        System.out.println("--------------------");
+        System.out.println(p1.toString());
+        System.out.println("--------------------");
+        System.out.println(t1.toString());
+    }
