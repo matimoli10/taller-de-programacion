@@ -1,0 +1,80 @@
+public class estacion extends sistema {
+    private String nombre;
+    private double latitud;
+    private String seencuentra;
+    
+    private int ano;
+    private double tempano;
+    private int mes;
+    private double tempmes;
+
+    public estacion(String nombre, double latitud, String seencuentra, int N, int A) {
+        super(A,N);
+        this.nombre = nombre;
+        this.latitud = latitud;
+        this.seencuentra = seencuentra;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public String getSeencuentra() {
+        return seencuentra;
+    }
+
+    public void setSeencuentra(String seencuentra) {
+        this.seencuentra = seencuentra;
+    }
+     public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+
+    public double getTempano() {
+        return tempano;
+    }
+
+    public void setTempano(double tempano) {
+        this.tempano = tempano;
+    }
+
+    public int getMes() {
+        return mes;
+    }
+
+    public void setMes(int mes) {
+        this.mes = mes;
+    }
+
+    public double getTempmes() {
+        return tempmes;
+    }
+
+    public void setTempmes(double tempmes) {
+        this.tempmes = tempmes;
+    }
+    @Override
+    public String toString() {
+        String aux;
+        prom_meses m;
+        aux = " la estacion "+getNombre()+" tiene una latitud de: "+getLatitud()+" y esta se encuentra en: "+getSeencuentra()+"\n";
+        return aux;
+    }
+    
+}
