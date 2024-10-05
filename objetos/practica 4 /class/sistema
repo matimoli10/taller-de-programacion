@@ -1,0 +1,17 @@
+public abstract class sistema {
+    private int A;
+    private int N;
+
+    public sistema(int A, int N) {
+        this.A = A;
+        this.N = N;
+    }
+
+    public int getA() {
+        return A;
+    }
+
+    public int getN() {
+        return N;
+    }    
+}
