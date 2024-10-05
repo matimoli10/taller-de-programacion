@@ -1,0 +1,30 @@
+package practica.pkg4;
+
+/**
+ *
+ * @author PC
+ */
+public class trabajadores extends persona {
+    private String ocupacion;
+
+    public trabajadores(String ocupacion, String nombre, int dni, int edad) {
+        super(nombre, dni, edad);
+        this.ocupacion = ocupacion;
+    }
+
+    public String getOcupacion() {
+        return ocupacion;
+    }
+
+    public void setOcupacion(String ocupacion) {
+        this.ocupacion = ocupacion;
+    }
+
+    @Override
+    public String toString() {
+        String aux;
+        aux = super.toString() + "\ny su ocupacion dentro del predio es: "+ getOcupacion();
+        return aux;
+    }
+    
+}
