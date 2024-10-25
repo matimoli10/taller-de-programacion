@@ -1,0 +1,79 @@
+2) Realice un programa en el que 4 robots limpien de papeles el perímetro de un cuadrado de lado
+20 en sentido horario.
+El vértice inferior izquierdo del cuadrado se ubica en la esquina (10,10).
+Al finalizar, cada robot debe informar la cantidad de papeles juntados en su lado.
+Al realizar este programa, analizar:
+a) ¿Cómo deben declararse la o las áreas?
+b) ¿Existe riesgo de colisión?
+
+a) el area debe declararse como area comun 
+b) si se llega a declarar el recorrer como que verifique si hay papel en el lugar y luego se mueve, exite riesgo, por ejemplo: ya que el robot 1 se inicia en 
+la posicion (10,10) y se queda recogiendo papeles, y el robot 4 que inicio en la (30,10) no tiene muchos papeles en el recorrido, ocurre colision.La manera 
+de resolverlo es que todos los robots abancen y no verifiquen los papeles de la posicion inicial y dejar que lo verifique el robot que va a quedar en esa posicion
+
+
+programa ejercicio2 
+procesos
+
+  proceso recogerpapel
+  comenzar 
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+    
+  proceso papel
+  comenzar 
+    si (HayPapelEnLaEsquina)
+      recogerpapel
+  fin
+    
+  proceso lado
+  comenzar 
+    repetir 20
+      mover 
+      papel
+    papel
+  fin
+  
+  proceso recibir
+  variables 
+    valor:numero
+  comenzar
+    RecibirMensaje(valor,jefe)
+    repetir valor 
+      derecha
+  fin
+areas
+  ciudad: AreaC (1,1,100,100)
+robots
+  robot tipo0
+  comenzar
+    EnviarMensaje(0,r1)
+    EnviarMensaje(1,r2)
+    EnviarMensaje(2,r3)
+    EnviarMensaje(3,r4)
+  fin
+  robot tipo1
+  comenzar
+    recibir
+    lado
+  fin
+  
+variables
+  jefe: tipo0
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(r3, ciudad)
+  AsignarArea(r4, ciudad)
+  AsignarArea(jefe,ciudad)
+  Iniciar(jefe,1,1)
+  Iniciar(r1,10,10)
+  Iniciar(r2,10,30)
+  Iniciar(r3,30,30)
+  Iniciar(r4,30,10)
+fin
