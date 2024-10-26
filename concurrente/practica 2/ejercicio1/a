@@ -5,7 +5,9 @@ Al finalizar el recorrido, el robot que recogió mayor cantidad de flores debe i
 diferencia de flores que obtuvo respecto al robot perdedor (el que obtuvo menos flores).
 Los robots inician en las esquinas (1, 1) y (2, 11) respectivamente.
 
-programa ejemplo
+
+
+programa ejercicio1
 procesos
   proceso juntarflores(ES cant: numero)
   comenzar
@@ -31,11 +33,14 @@ robots
     juntarflores(cant)  
     EnviarMensaje(cant,r2)
     RecibirMensaje(otro,r2)
-    si (cant > otro)
-      resta := cant - otro
-      Informar(cant)
-      Informar(otro)
-      Informar(resta)
+    si ( cant = otro)
+      Informar(cant,otro)
+    sino
+      si (cant > otro)
+        resta := cant - otro
+        Informar(cant)
+        Informar(otro)
+        Informar(resta)
   fin
   robot robot2
   variables
@@ -51,11 +56,14 @@ robots
     juntarflores(cant)
     EnviarMensaje(cant,r1)
     RecibirMensaje(otro,r1)
-    si (cant > otro)
-      resta := cant - otro
-      Informar(cant)
-      Informar(otro)
-      Informar(resta)
+    si ( cant = otro)
+      Informar(cant,otro)
+    sino
+      si (cant > otro)
+        resta := cant - otro
+        Informar(cant)
+        Informar(otro)
+        Informar(resta)
   fin
 variables
   r1: robot1
