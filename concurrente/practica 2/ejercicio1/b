@@ -1,0 +1,70 @@
+1. Dos robots compiten para ver cuál junta más flores. El primer robot recoge todas las
+flores de la avenida 1 entre las calles 1 y 10. El segundo robot recoge todas las flores
+de la avenida 2, entre las calles 11 y 20.
+Al finalizar el recorrido, el robot que recogió mayor cantidad de flores debe informar la
+diferencia de flores que obtuvo respecto al robot perdedor (el que obtuvo menos flores).
+Los robots inician en las esquinas (1, 1) y (2, 11) respectivamente.
+b. Modifique el ejercicio anterior, considerando que ahora habrá un robot fiscalizador,
+que será responsable de informar la diferencia de flores que obtuvo el ganador con
+respecto al perdedor. El robot fiscalizador se ubica en la esquina (2,1)
+
+
+programa ejemplo
+procesos
+  proceso juntarflores(ES cant: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cant := cant +1
+  fin 
+areas
+  area1: AreaP (1,1,1,10)
+  area2: AreaP (2,11,2,20)
+  area3: AreaP (2,1,2,1)
+robots
+  robot anuncio
+  variables
+    cantr1: numero
+    cantr2: numero
+    resta: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    RecibirMensaje(cantr1,r1)
+    RecibirMensaje(cantr2,r2)
+    si(cantr1 = cantr2)
+      Informar(cantr1,cantr2)
+    sino
+      si(cantr1 > cantr2)
+        resta := cantr1 - cantr2
+        Informar(resta)
+      sino
+        resta := cantr2 - cantr1
+        Informar(resta)
+  fin
+  robot robot1
+  variables
+    cant: numero
+    soy: numero
+  comenzar
+    RecibirMensaje(soy,fiscalizador)
+    cant := 0
+    Random(cant,10,100)
+    repetir 9
+      juntarflores(cant)
+      mover
+    juntarflores(cant)  
+    EnviarMensaje(cant,fiscalizador)
+  fin
+variables
+  r1: robot1
+  r2: robot1
+  fiscalizador: anuncio
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(fiscalizador, area3)
+  Iniciar(r1,1,1)
+  Iniciar(r2,2,11)
+  Iniciar(fiscalizador, 2,1)
+fin
