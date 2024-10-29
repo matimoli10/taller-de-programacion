@@ -11,7 +11,8 @@ procesos
   proceso cantidadpapel(ES cantp: numero)
   variables 
     papel:numero
-  comenzar 
+  comenzar
+    papel:=0
     mientras(HayPapelEnLaEsquina)
       tomarPapel
       papel := papel + 1
@@ -24,6 +25,7 @@ procesos
   variables 
     flor:numero
   comenzar
+    flor:=0
     mientras(HayFlorEnLaEsquina)
       tomarFlor
       flor := flor + 1
@@ -32,13 +34,13 @@ procesos
       depositarFlor
   fin
   
-  proceso verifico(E cantp:numero, E cantf:numero,ES cant: numero)
+  proceso verifico(E cantp:numero; E cantf:numero; ES cant: numero)
   comenzar
     si(cantp - cantf = 1)
-      cant := cant + 1;
+      cant:= cant + 1
   fin
   
-  proceso escalones(E num: numero,ES cant:numero)
+  proceso escalones(E num: numero; ES cant:numero)
   variables
     cantp, cantf : numero
   comenzar
@@ -67,9 +69,9 @@ robots
     num := 1
     cant := 0
     repetir 4
-      escalones (num,cant)
+      escalones(num,cant)
       num := num +1
-    informar(cant)
+    Informar(cant)
   fin
 variables
   r1: robot1
@@ -77,9 +79,9 @@ variables
   r3: robot1
 comenzar
   AsignarArea(r1, ciudad)
-  Iniciar(r1, 12,14)
   AsignarArea(r2, ciudad)
-  Iniciar(r2, 17,10)
   AsignarArea(r3, ciudad)
+  Iniciar(r1, 12,14)
+  Iniciar(r2, 17,10)
   Iniciar(r3, 22,6)
 fin
