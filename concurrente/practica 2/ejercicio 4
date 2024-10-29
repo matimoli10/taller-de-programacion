@@ -1,0 +1,179 @@
+4. Realice un programa en el que un robot fiscalizador controla el acceso de 4 robots
+recolectores al cuadrante encerrado entre las esquinas (25,25) y (75,75) . Para ello, el
+robot fiscalizador avisa a un robot recolector aleatorio que puede ingresar al área. El
+robot que recibe la autorización de acceso calcula una esquina aleatoria dentro del
+área, limpia dicha esquina de flores y papeles, regresa a su esquina y avisa al robot
+fiscalizador que ya finalizó.
+Se realizarán en total 10 accesos al cuadrante entre los 4 robots recolectores. Al
+finalizar, el robot fiscalizador deberá indicar al robot ganador que se posicione en la
+esquina (50,50).
+El robot fiscalizador inicia en la esquina (1,1) y los robots recolectores inician en las
+esquinas (25,1) (30,1) (35,1) y (40,1) respectivamente.
+
+
+programa ejemplo
+procesos
+  proceso juntaresquina(ES cantt: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      cantt := cantt + 1
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cantt := cantt + 1
+  fin
+areas
+  area : AreaPC(25,25,75,75)
+  area1: AreaP(25,1,25,1)
+  area2: AreaP(30,1,30,1)
+  area3: AreaP(35,1,35,1)
+  area4: AreaP(40,1,40,1)
+  area5: AreaP(1,1,1,1)
+robots
+  robot ordenes 
+  variables
+    autorizo: numero
+    cant: numero
+    mayor: numero 
+    soy: numero
+    ganador: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    repetir 10 
+      Random(autorizo,1,4)
+      si((autorizo = 1)|(autorizo = 2))
+        si(autorizo = 1)
+          EnviarMensaje(autorizo,r1)
+          EnviarMensaje(25,r1)
+          EnviarMensaje(1,r1)
+        sino
+          EnviarMensaje(autorizo,r2)
+          EnviarMensaje(30,r2)
+          EnviarMensaje(1,r2)
+      sino
+        si(autorizo = 3)
+          EnviarMensaje(autorizo,r3)
+          EnviarMensaje(35,r3)
+          EnviarMensaje(1,r3)
+        sino  
+          EnviarMensaje(autorizo,r4)
+          EnviarMensaje(40,r4)
+          EnviarMensaje(1,r4)
+    EnviarMensaje(0,r1)
+    EnviarMensaje(0,r2)
+    EnviarMensaje(0,r3)
+    EnviarMensaje(0,r4)
+    repetir 4
+      RecibirMensaje(soy,*)
+      si((soy = 1)|(soy = 2))
+        si(soy = 1)
+          RecibirMensaje(cant,r1)
+          Informar(cant)
+          si(cant > mayor)
+            mayor := cant
+            ganador := soy
+        sino
+          RecibirMensaje(cant,r2)
+          Informar(cant)
+          si(cant > mayor)
+            mayor := cant
+            ganador := soy
+      sino
+        si(soy = 3)
+          RecibirMensaje(cant,r3)
+          Informar(cant)
+          si(cant > mayor)
+            mayor := cant
+            ganador := soy
+         
+        sino
+          RecibirMensaje(cant,r4)
+          Informar(cant)
+          si(cant > mayor)
+            mayor := cant
+            ganador := soy
+            
+    si ((ganador = 1)|(ganador = 2))
+      si (ganador = 1)
+        EnviarMensaje(1,r1)
+        EnviarMensaje(50,r1)
+        EnviarMensaje(50,r1)
+        EnviarMensaje(0,r2)
+        EnviarMensaje(0,r3)
+        EnviarMensaje(0,r4)
+      sino
+        EnviarMensaje(0,r1)
+        EnviarMensaje(1,r2)
+        EnviarMensaje(50,r2)
+        EnviarMensaje(50,r2)
+        EnviarMensaje(0,r3)
+        EnviarMensaje(0,r4)
+    sino
+      si(ganador = 3)
+        EnviarMensaje(0,r1)
+        EnviarMensaje(0,r2)
+        EnviarMensaje(1,r3)
+        EnviarMensaje(50,r3)
+        EnviarMensaje(50,r3)
+        EnviarMensaje(0,r4)
+      sino
+        EnviarMensaje(0,r1)
+        EnviarMensaje(0,r2)
+        EnviarMensaje(0,r3)
+        EnviarMensaje(1,r4)
+        EnviarMensaje(50,r4)
+        EnviarMensaje(50,r4)
+  fin
+  robot tipo1
+  variables
+    soy: numero
+    cantt: numero
+    autorizo: numero
+    avenida: numero
+    calle: numero
+  comenzar
+    cantt :=0
+    RecibirMensaje(soy,jefe)
+    RecibirMensaje(autorizo,jefe)
+    mientras(autorizo <> 0)
+      Random(avenida,25,75)
+      Random(calle,25,75)
+      Pos(avenida,calle)
+      juntaresquina(cantt)
+      RecibirMensaje(avenida,jefe)
+      RecibirMensaje(calle,jefe)
+      Pos(avenida,calle)
+      RecibirMensaje(autorizo,jefe)
+    EnviarMensaje(soy,jefe)
+    EnviarMensaje(cantt,jefe)
+    RecibirMensaje(autorizo,jefe)
+    si(autorizo = 1)
+      RecibirMensaje(avenida,jefe)
+      RecibirMensaje(calle,jefe)
+      Pos(avenida,calle)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe : ordenes
+comenzar
+  AsignarArea(r1, area)
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area)
+  AsignarArea(r3, area3)
+  AsignarArea(r4, area)
+  AsignarArea(r4, area4)
+  AsignarArea(jefe, area5)
+  Iniciar(r1,25,1)
+  Iniciar(r2,30,1)
+  Iniciar(r3,35,1)
+  Iniciar(r4,40,1)
+  Iniciar(jefe,1,1)
+fin
