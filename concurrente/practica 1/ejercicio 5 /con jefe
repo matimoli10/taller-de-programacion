@@ -1,0 +1,117 @@
+5) Realice un programa en el que cuatro robots realizan las siguientes actividades:
+● El robot 1 debe limpiar de flores las primeras 15 esquinas de las calles 75 y 80. Al finalizar
+cada calle, debe depositar todas las flores en la última esquina.
+● El robot 2 debe limpiar de papeles las últimas 20 esquinas de las avenidas 75 y 80. Al
+finalizar cada avenida debe depositar todos los papeles en la primera esquina.
+● El robot 3 debe limpiar de flores las últimas 30 esquinas de las calles 10 y 15. Al finalizar
+cada calle, debe depositar todas las flores en la última esquina.
+● El robot 4 debe limpiar de papeles las primeras 10 esquinas de las avenidas 10 y 15. Al
+finalizar cada avenida debe depositar todos los papeles en la primera esquina
+
+
+programa ejercicio5
+procesos
+  proceso juntarflores 
+  comenzar 
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin 
+  proceso dejarflores
+  comenzar 
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin 
+  proceso juntarpapeles
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+  proceso depositarpapeles
+  comenzar
+    mientras(HayPapelEnLaBolsa)
+      depositarPapel
+  fin
+  proceso depositarflores
+  comenzar
+    mientras(HayFlorEnLaBolsa)
+      depositarFlor
+  fin
+  proceso recorrojf(E esquinas:numero)
+  comenzar
+    repetir esquinas
+      juntarflores
+      mover
+    depositarflores
+  fin
+  proceso recorrojp (E esquinas:numero)
+  comenzar
+    repetir esquinas
+      juntarpapeles
+      mover
+    depositarpapeles
+  fin
+areas
+  area1: AreaP (1,75,15,75)
+  area2: AreaP (1,80,15,80)
+  area3: AreaP (75,81,75,100)
+  area4: AreaP (80,81,80,100)
+  area5: AreaP (71,10,100,10)
+  area6: AreaP (71,15,100,15)
+  area7: AreaP (10,1,10,10)
+  area8: AreaP (15,1,15,10)
+  area9: AreaP (40,40,40,40)
+robots
+  robot ordenes
+  comenzar 
+    EnviarMensaje(14,r1)
+    EnviarMensaje(19,r2)
+    EnviarMensaje(29,r3)
+    EnviarMensaje(9,r4)
+  fin
+  
+  robot robot1
+  variables 
+    esquina: numero
+    avenida: numero
+  comenzar
+    derecha
+    avenida := PosAv
+    RecibirMensaje(esquina,jefe)
+    recorrojf(esquina)
+    Pos(avenida,PosCa+5)
+    recorrojf(esquina)
+  fin
+  
+  robot robot2 
+  variables 
+    esquina: numero
+    calle: numero
+  comenzar
+    calle := PosCa
+    RecibirMensaje(esquina,jefe)
+    recorrojp(esquina)
+    Pos(PosAv+5,calle)
+    recorrojp(esquina)
+  fin
+variables
+  r1: robot1
+  r2: robot2
+  r3: robot1
+  r4: robot2
+  jefe: ordenes
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r1, area2)
+  AsignarArea(r2, area3)
+  AsignarArea(r2, area4)
+  AsignarArea(r3, area5)
+  AsignarArea(r3, area6)
+  AsignarArea(r4, area7)
+  AsignarArea(r4, area8)  
+  AsignarArea(jefe,area9)
+  Iniciar(r1,1,75)
+  Iniciar(r2,75,81)
+  Iniciar(r3,71,10)
+  Iniciar(r4,10,1)
+  Iniciar(jefe,40,40)
+fin
