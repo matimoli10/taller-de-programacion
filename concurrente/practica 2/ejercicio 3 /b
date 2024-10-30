@@ -1,0 +1,109 @@
+3. Realice un programa con 2 equipos:
+- El equipo A, compuesto por los robots A1 y A2, debe juntar papeles de las
+primeras 20 esquinas de la calle 1
+- El equipo B, compuesto por los robots B1 y B2, debe juntar flores de las primeras
+20 esquinas de la calle 5
+Los robots A1 y B1 deberán realizar las 10 primeras esquinas de su recorrido, y al
+finalizar avisarán a los robots A2 y B2 respectivamente para que continúen con las
+siguientes 10 esquinas. El segundo robot de cada equipo debe informar la cantidad
+de elementos recogidos en las 20 esquinas.
+Inicialice los 4 robots en las esquinas que considere más apropiadas según el
+trayecto que le corresponde realizar a cada uno.
+b. Modifique el programa anterior para que cada equipo repita el recorrido con las
+siguientes 20 esquinas de sus correspondientes calles.
+
+
+
+programa ejemplo
+procesos
+  proceso juntarpapeles (ES cant: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant + 1
+  fin
+  proceso juntarflores(ES cant: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant + 1
+  fin
+  proceso recorrojuntandopapeles(ES cant : numero)
+  comenzar
+    repetir 9
+      juntarpapeles(cant)
+      mover
+    juntarpapeles(cant)
+  fin
+  proceso recorrojuntandoflores(ES cant: numero)
+  comenzar
+    repetir 9
+      juntarflores(cant)
+      mover 
+    juntarflores(cant)
+  fin
+areas
+  area1: AreaPC (1,1,100,1)
+  area2: AreaPC(1,5,100,5)
+robots
+  robot tipo1
+  variables 
+    cant : numero
+  comenzar
+    derecha
+    repetir 4
+      cant := 0
+      recorrojuntandopapeles(cant)
+      EnviarMensaje(cant,r3)
+      RecibirMensaje(cant,r3)
+      Pos(PosAv+11,PosCa)
+  fin
+  robot tipo2
+  variables 
+    cant : numero
+  comenzar
+    derecha
+    repetir 4
+      cant := 0
+      recorrojuntandoflores(cant)
+      EnviarMensaje(cant,r4)
+      RecibirMensaje(cant,r4)
+      Pos(PosAv+11,PosCa)
+  fin
+  robot tipo3
+  variables 
+    cant: numero
+  comenzar
+    derecha
+    repetir 4
+      RecibirMensaje(cant,r1)
+      recorrojuntandopapeles(cant)
+      EnviarMensaje(cant,r1)
+      Pos(PosAv+11,PosCa)
+  fin
+  robot tipo4
+  variables 
+    cant: numero
+  comenzar
+    derecha
+    repetir 4
+      RecibirMensaje(cant,r2)
+      recorrojuntandoflores(cant)
+      EnviarMensaje(cant,r2)
+      Pos(PosAv+11,PosCa)
+  fin
+variables
+  r1: tipo1
+  r2: tipo2
+  r3: tipo3
+  r4: tipo4
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area2)
+  AsignarArea(r3, area1)
+  AsignarArea(r4, area2)
+  Iniciar(r1,1,1)
+  Iniciar(r2,1,5)
+  Iniciar(r3,11,1)
+  Iniciar(r4,11,5)
+fin
