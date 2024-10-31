@@ -1,0 +1,154 @@
+2- Realice un programa en el cual 2 robots corren una carrera. El recorrido realizado por
+cada uno es el que se muestra en la siguiente figura. Durante el recorrido el robot 1 debe
+juntar todas las flores que encuentre en los vértices de cada escalón, y el robot 2 debe
+juntar todos los papeles que encuentre en los vértices de cada escalón. Al finalizar deben
+informar la cantidad de elementos recogidos.
+El robot 1 debe iniciar su recorrido en la esquina (1,1) y el robot 2 en la esquina (31,1).
+Al finalizar la carrera, un robot jefe (inicializado en la esquina (15,1) ) debe informar qué
+robot llegó primero a la esquina central de su recorrido.
+
+
+programa ejemplo
+procesos
+  proceso juntarpapeles (ES cant: numero)
+  comenzar
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      cant:= cant + 1
+  fin
+  proceso juntarflores(ES cant: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      cant:= cant + 1
+  fin
+  proceso recorridof(ES cant: numero)
+  variables
+    num :numero
+  comenzar
+    num := 5
+    repetir 4
+      repetir num
+        mover
+      derecha
+      juntarflores(cant)
+      repetir num
+        mover
+      repetir 3 
+        derecha
+      num := num - 1 
+  fin
+  proceso recorridof2(ES cant: numero)
+  variables
+    num : numero
+  comenzar
+    num := 2
+    repetir 4
+      repetir num
+        mover 
+      derecha
+      juntarflores(cant)
+      repetir num
+        mover
+      repetir 3 
+        derecha
+      num :=  num +1
+  fin
+  proceso recorridop(ES cant: numero)
+  variables
+    num :numero
+  comenzar
+    num := 5
+    repetir 4
+      repetir num
+        mover
+      juntarpapeles(cant)
+      repetir 3
+        derecha
+      repetir num
+        mover
+      derecha
+      num := num - 1  
+  fin
+  proceso recorridop2(ES cant: numero)
+  variables
+    num: numero
+  comenzar
+    num := 2
+    repetir 4
+      repetir num
+        mover 
+      repetir 3
+        derecha
+      juntarflores(cant)
+      repetir num
+        mover
+      derecha
+      num :=  num +1
+  fin
+areas
+  area1: AreaC (1,1,50,50)
+robots
+  robot ordenes
+  variables
+    soy: numero
+  comenzar
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    RecibirMensaje(soy,*)
+    Informar({'gano el robot',}soy)
+    RecibirMensaje(soy,*)
+  fin
+  robot tipo1
+  variables 
+    cant : numero
+    soy: numero
+  comenzar
+    cant := 0
+    recorridof(cant) 
+    mover
+    derecha   
+    BloquearEsquina(16,16)
+    mover
+    Pos(15,16)
+    LiberarEsquina(16,16)
+    repetir 2
+      derecha
+    recorridof2(cant)
+    Informar(cant)
+    RecibirMensaje(soy,jefe)
+    EnviarMensaje(soy,jefe)
+  fin
+  robot tipo2
+  variables 
+    cant : numero
+    soy : numero
+  comenzar
+    cant := 0
+    recorridop(cant)
+    mover
+    repetir 3
+      derecha
+    BloquearEsquina(16,16)
+    mover
+    Pos(17,16)
+    LiberarEsquina(16,16)
+    repetir 2
+      derecha
+    recorridop2(cant)
+    Informar(cant)
+    RecibirMensaje(soy,jefe)
+    EnviarMensaje(soy,jefe)
+  fin
+variables
+  r1: tipo1
+  r2: tipo2
+  jefe : ordenes
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area1)
+  AsignarArea(jefe,area1)
+  Iniciar(r1,1,1)
+  Iniciar(r2,31,1)
+  Iniciar(jefe,15,1)
+fin
