@@ -1,0 +1,117 @@
+3- Realice un programa donde 4 robots colaboren para recoger todas las flores de una
+esquina indicada por un robot jefe, seleccionada de manera aleatoria dentro del cuadrante
+(2,2) y (10,10). Para ello el jefe determina inicialmente una esquina y los robots deben
+accederla, tomar de a una las flores y volver a su posición inicial. Cuando los robots
+terminan el jefe deberá informar cuál de ellos logró recoger más flores.
+Las esquinas de inicio de los robots deberán ser jefe (1,1) y robots (2,1), (3, 1), (4,1) y (5,1).
+
+
+programa ejemplo
+procesos
+  proceso verifico(ES cant: numero; ES sigo: boolean;E avenida: numero; E calle:numero)
+  comenzar
+    Pos(avenida,calle)
+    si(HayFlorEnLaEsquina)
+      tomarFlor
+      cant:=cant + 1
+    sino
+      sigo := F
+  fin
+areas
+  area1 : AreaP (1,1,1,1)
+  area2 : AreaP (2,1,2,1)
+  area3 : AreaP (3,1,3,1)
+  area4 : AreaP (4,1,4,1)
+  area5 : AreaP (5,1,5,1)
+  area6: AreaPC (2,2,10,10)
+robots
+  robot ordenes
+  variables
+    avenida: numero
+    calle: numero
+    juntomas: numero
+    cant, cantmax: numero
+    sigo: boolean
+    soy: numero
+  comenzar
+    sigo := V
+    cantmax := 0
+    EnviarMensaje(1,r1)
+    EnviarMensaje(2,r2)
+    EnviarMensaje(3,r3)
+    EnviarMensaje(4,r4)
+    Random(avenida,2,10)   
+    Random(calle,2,10)
+    EnviarMensaje(avenida,r1)
+    EnviarMensaje(calle,r1)
+    EnviarMensaje(avenida,r2)
+    EnviarMensaje(calle,r2)
+    EnviarMensaje(avenida,r3)
+    EnviarMensaje(calle,r3)
+    EnviarMensaje(avenida,r4)
+    EnviarMensaje(calle,r4)
+    mientras(sigo <> F)
+      EnviarMensaje(sigo,r1)
+      RecibirMensaje(sigo,r1)
+      EnviarMensaje(sigo,r2) 
+      RecibirMensaje(sigo,r2)
+      EnviarMensaje(sigo,r3)
+      RecibirMensaje(sigo,r3)
+      EnviarMensaje(sigo,r4)
+      RecibirMensaje(sigo,r4)
+    repetir 4
+      RecibirMensaje(soy,*)
+      Informar(soy)
+      RecibirMensaje(cant,*)
+      Informar(cant)
+      si(cant > cantmax)
+        juntomas := soy
+        cantmax := cant
+    Informar(juntomas)
+  fin
+  robot tipo1
+  variables 
+    av,ca: numero
+    avenida,calle: numero
+    cant: numero
+    soy: numero
+    sigo: boolean
+  comenzar
+    av := PosAv
+    ca := PosCa
+    RecibirMensaje(soy, jefe)
+    RecibirMensaje(avenida,jefe)
+    RecibirMensaje(calle,jefe)
+    RecibirMensaje(sigo,jefe)
+    mientras(sigo = V)
+      BloquearEsquina(avenida,calle)
+      verifico(cant,sigo,avenida,calle)
+      Pos(av,ca)
+      LiberarEsquina(avenida,calle)
+      EnviarMensaje(sigo,jefe)
+      RecibirMensaje(sigo,jefe)
+    EnviarMensaje(soy,jefe)
+    EnviarMensaje(cant,jefe)
+  fin
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1
+  r4: tipo1
+  jefe: ordenes
+comenzar
+  AsignarArea(r1, area2)
+  AsignarArea(r2, area3)
+  AsignarArea(r3, area4)
+  AsignarArea(r4, area5)
+  AsignarArea(r1, area6)
+  AsignarArea(r2, area6)
+  AsignarArea(r3, area6)
+  AsignarArea(r4, area6)
+  AsignarArea(jefe, area1)
+  Iniciar(jefe, 1,1)
+  Iniciar(r1, 2,1)
+  Iniciar(r2, 3,1)
+  Iniciar(r3, 4,1)
+  Iniciar(r4, 5,1)
+fin
