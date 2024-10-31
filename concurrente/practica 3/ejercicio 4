@@ -6,6 +6,9 @@ coordinador que ha finalizado. Cuando todos los robots finalizaron, el robot coo
 deberá informar qué robot finalizó último y a continuación deberá recolectar todas las flores
 de la esquina (11,11).
 
+El robot coordinador inicia en la esquina (1,1).
+Los robots inician en las esquinas (9,9) (9,10) (9,11) y (9,12).
+
 
 
 programa ejemplo
